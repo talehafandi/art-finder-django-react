@@ -12,4 +12,5 @@
 - [React Documentation](https://react.dev/)
 - [React Hooks Playlist](https://youtube.com/playlist?list=PLZlA0Gpn_vH8EtggFGERCwMY5u5hOjf-h&si=mrdsYMoDg_dvlO1k)
 - [BEM naming in CSS/SCSS](https://youtu.be/SLjHSVwXYq4?si=eQw4lEu9xebkTtdV)
+- [REST API reading](https://aws.amazon.com/what-is/restful-api/)
   
