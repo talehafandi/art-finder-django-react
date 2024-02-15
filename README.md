@@ -1,22 +1,22 @@
 # ART FINDER
 
-**PLEASE READ THIS FOR COMMIT BEST PRACTICES**
+**PLEASE READ THIS FOR GIT BEST PRACTICES**
 
 In Commit messages we should aim short and clear messages that will give idea to other developers about the purpose of this commit, what was done and what files/functions were altered. To do that, we will follow these guidelines
 - Always mention commit type in the start and write your commit messages in present simple tense (e.g. "feat: add popup component" instead of "I added popup component")
 - Make sure you are pushing to your own branch and pull changes before pushing.
-- Even if you make mistake in commit message, do not try to change to undo commit. Just tell other members about the mistake.
+- Even if you make mistake in commit message, do not try to change or undo commit. Just tell other members about the mistake.
 - Avoid using rebase, revert, reset or any other dangerous git commands.
 - Read about git commands and branches
 
 Here are the commit types we are going to use:
-feat – a new feature is introduced with the changes
-fix – a bug fix has occurred
-refactor – refactored code that neither fixes a bug nor adds a feature (for example optimising function)
-test – including new or correcting previous tests
-docs – updates to documentation such as a the README or other markdown files
-style – changes that do not affect the meaning of the code, likely related to code formatting such as white-space, missing semi-colons, and so on.
-chore – changes that do not relate to a fix or feature and don't modify src or test files (for example updating dependencies)
+- feat – a new feature is introduced with the changes
+- fix – a bug fix has occurred
+- refactor – refactored code that neither fixes a bug nor adds a feature (for example optimising function)
+- test – including new or correcting previous tests
+- docs – updates to documentation such as a the README or other markdown files
+- style – changes that do not affect the meaning of the code, likely related to code formatting such as white-space, missing semi-colons, and so on.
+- chore – changes that do not relate to a fix or feature and don't modify src or test files (for example updating dependencies)
 
 For more on github:
 - [How to write better commit messages](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/)
