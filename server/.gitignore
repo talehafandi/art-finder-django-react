@@ -1,0 +1,4 @@
+.env
+
+# add all __pycache__ folders
+__pycache__/
