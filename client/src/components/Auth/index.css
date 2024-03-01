@@ -1,0 +1,104 @@
+.sign-in-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 60vw;
+  max-height: 637px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  z-index: -3;
+  flex: 1;
+}
+
+.left-side {
+  width: 40%;
+  max-width: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  min-height: 200px;
+  min-width: 400px;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  .overlap-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    object-fit: span;
+    height: 100%;
+    .overlap {
+      margin-top: 40%;
+    }
+    .logo-text {
+      position: absolute;
+      bottom: 100px;
+    }
+  }
+}
+
+.right-side {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 500px;
+  .close-btn-wrapper {
+    width: 100%;
+    display: flex;
+    align-self: flex-start;
+    svg {
+      margin-left: auto;
+    }
+  }
+  .auth-options {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+    .text-wrapper {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 5%;
+    }
+  }
+}
+
+.sign-up {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-text {
+  display: flex;
+  align-items: left;
+  width: 100%;
+}
+
+/* .overlap {
+  margin-top: 30%;
+} */
+
+.sign-in-form-wrapper {
+  padding: 0 10% 0 10%;
+  .sign-in-text {
+    margin-top: 2%;
+    font-weight: 200;
+    font-size: 30px;
+    line-height: 37px;
+    color: #000000;
+  }
+  .sign-in-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5%;
+  }
+}

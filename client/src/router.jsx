@@ -7,6 +7,7 @@ import AppbarLayout from "./components/Layouts/AppbarLayout";
 
 //Import pages
 import { Explore } from "./pages/Explore";
+import AuthDialog from "./pages/Auth";
 
 //TODO: Implement Authentication
 // Fake authentication function
@@ -40,12 +41,16 @@ const routes = [
   {
     path: "auth",
     element: <BaseLayout />,
-    // children: [
-    //   {
-    //     path: "signin",
-    //     element:
-    //   },
-    // ],
+    children: [
+      {
+        path: "",
+        element: <Navigate to="signin" />,
+      },
+      {
+        path: "signin",
+        element: <AuthDialog />,
+      },
+    ],
   },
   {
     path: "explore",
@@ -68,3 +73,5 @@ const routes = [
     // ],
   },
 ];
+
+export default routes;
