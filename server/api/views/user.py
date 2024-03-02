@@ -32,12 +32,16 @@ def signup(request):
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(UserModel, username=request.data['username'])
-    if not user.check_password(request.data['password']):
-        return Response("missing user", status=status.HTTP_404_NOT_FOUND)
-    token, created = Token.objects.get_or_create(user=user)
-    serializer = UserSerializer(user)
-    return Response({'token': token.key, 'user': serializer.data})
+    try:
+        user = get_object_or_404(UserModel, username=request.data['username'])
+        if not user.check_password(request.data['password']):
+            return Response("missing user", status=status.HTTP_404_NOT_FOUND)
+        token, created = Token.objects.get_or_create(user=user)
+        serializer = UserSerializer(user)
+        return Response({'token': token.key, 'user': serializer.data})
+    except Exception as error:
+        print("ERROR: ", error)
+        return Response({"message": error}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def test(request):
