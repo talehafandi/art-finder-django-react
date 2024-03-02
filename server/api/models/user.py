@@ -43,20 +43,22 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    username = models.CharField(max_length=16)
+    username = models.CharField(unique=True, max_length=16)
     email = models.EmailField(unique=True, max_length=255)
     role = models.CharField(
         max_length=20, choices=ROLE_CHOICES, default=USER_ROLE)
     avatar_url = models.URLField(blank=True)
     is_active = models.BooleanField(default=True)
 
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'username', 'email']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
     objects = UserModelManager()
 
-    def __str(self):
+    def __str__(self):
         return self.username
 
+    
 
 # KINDA UTILS, DIDN'T KNOW WHERE TO PUT
 # import random
