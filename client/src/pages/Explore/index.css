@@ -4,15 +4,16 @@
   overflow: auto;
   min-height: 100vh;
   flex-direction: column;
-  padding: 30px;
+  padding-left: 50px;
 }
 .container-left {
-  width: 50vw;
+  width: 40vw;
   display: flex;
   overflow: auto;
   min-height: 100vh;
   align-items: center;
   flex-direction: column;
+  padding-top: 30px;
 }
 .exploresearchcategories {
   gap: 22px;
@@ -21,10 +22,15 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 20px;
+
   .exploresearch {
-    gap: 143px;
+    /* gap: 143px; */
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     .text {
       color: rgba(43, 43, 43, 1);
       width: 122px;
@@ -48,10 +54,15 @@
     }
   }
   .explorecategoriesmenu {
-    gap: 41px;
+    /* gap: 41px; */
+    row-gap: 10px;
+    width: 100%;
     display: flex;
     align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
+
   .category-menu {
     width: 80px;
     height: auto;
@@ -81,7 +92,7 @@
 
 .list-container {
   display: flex;
-  max-height: calc(100vh - 200 - 62px);
-  overflow: scroll;
-  padding: 20px 10px;
+  max-height: calc(100vh - 220px - 62px);
+  overflow-y: scroll;
+  padding-top: 10px;
 }
