@@ -13,11 +13,14 @@ const WishlistCard = (props) => {
       }
       <img src={venueImage} className="event-venue-card-image" />
       <div className="wishlist-card-content">
-        <img
-          src={favouriteIcon}
-          alt="Wishlist Button"
-          className="wishlisted-filled"
-        />
+        <div className="wishlist-button-wrapper">
+          <img
+            src={favouriteIcon}
+            alt="Wishlist Button"
+            className="wishlisted-filled"
+          />
+        </div>
+
         <div className="wishlist-card-details">
           <span className="event-venue-name">
             <span>GOMA</span>

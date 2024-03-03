@@ -1,39 +1,38 @@
 .wishlist-card-container {
-  width: 254px;
+  min-width: 254px;
+  max-width: 320px;
   height: 329px;
   display: flex;
   padding: 15px;
   position: relative;
   align-self: center;
-  padding: 10px;
+  padding: 0px 10px 10px 0px;
   border-radius: 20px;
   margin: 10px;
+  flex: 1;
 }
 .event-venue-card-image {
   top: 0px;
   left: 0px;
   right: 0px;
-  width: 254px;
+  width: 100%;
+  height: 100%;
   bottom: 0px;
   height: 329px;
-  margin: auto;
   z-index: 1;
   position: absolute;
   border-radius: 20px;
+  object-fit: cover;
 }
 .wishlist-card-content {
   height: 100%;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  width: 254px;
+  min-width: 254px;
   bottom: 0px;
   margin: auto;
   display: flex;
   justify-content: space-between;
   z-index: 2;
   position: absolute;
-  align-items: flex-end;
   padding: 15px 15px 20px;
   flex-direction: column;
   background: linear-gradient(
@@ -42,11 +41,18 @@
     rgba(14, 14, 14, 0.8) 78%
   );
   border-radius: 20px;
+  flex: 1;
 }
-.wishlisted-filled {
-  width: 28px;
-  height: 26px;
+.wishlist-button-wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+  .wishlisted-filled {
+    width: 28px;
+    height: 26px;
+  }
 }
+
 .wishlist-card-details {
   gap: 8px;
   display: flex;
@@ -54,7 +60,7 @@
   flex-direction: column;
   .event-venue-name {
     color: rgba(255, 255, 255, 1);
-    width: 215px;
+    /* width: 215px; */
     height: auto;
     font-size: 20px;
     font-style: Bold;
@@ -66,7 +72,7 @@
   }
   .short-description {
     color: rgba(255, 255, 255, 1);
-    width: 216px;
+    /* width: 216px; */
     height: auto;
     font-size: 16px;
     text-align: left;
@@ -78,7 +84,7 @@
     align-items: center;
     .location-name {
       color: rgba(99, 32, 238, 1);
-      width: 105px;
+      /* width: 105px; */
       height: auto;
       font-size: 12px;
       font-style: Regular;

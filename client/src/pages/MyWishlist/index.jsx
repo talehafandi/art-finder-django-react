@@ -2,6 +2,7 @@ import "./index.css";
 import React from "react";
 import expandDown from "../../assets/expand_down.svg";
 import WishlistCard from "../../components/WishlistCard";
+import NearbyVenuesEventsCard from "../../components/NearbyVenuesEventsCard";
 
 const MyWishlist = (props) => {
   return (
@@ -44,7 +45,14 @@ const MyWishlist = (props) => {
           <WishlistCard />
         </div>
       </div>
-      <div className="places-events-nearby-wrapper"></div>
+      <div className="places-events-nearby-wrapper">
+        <span className="places-events-nearby-heading">
+          Places and Events nearby
+        </span>
+        <div className="places-events-nearby-container">
+          <NearbyVenuesEventsCard />
+        </div>
+      </div>
     </div>
   );
 };

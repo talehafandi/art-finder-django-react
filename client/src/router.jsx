@@ -4,12 +4,12 @@ import { Navigate } from "react-router-dom";
 //Import layouts
 import BaseLayout from "./components/Layouts/BaseLayout";
 import AppbarLayout from "./components/Layouts/AppbarLayout";
-import WishlistCard from "./components/WishlistCard";
 
 //Import pages
 import AuthDialog from "./pages/Auth";
 import Explore from "./pages/Explore";
 import MyWishlist from "./pages/MyWishlist";
+import NearbyVenuesEventsCard from "./components/NearbyVenuesEventsCard";
 
 //TODO: Implement Authentication
 // Fake authentication function
@@ -60,7 +60,7 @@ const routes = [
     children: [
       {
         path: "",
-        element: <WishlistCard />,
+        element: <NearbyVenuesEventsCard />,
       },
     ],
   },
