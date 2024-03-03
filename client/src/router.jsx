@@ -10,6 +10,8 @@ import AuthDialog from "./pages/Auth";
 import Explore from "./pages/Explore";
 import MyWishlist from "./pages/MyWishlist";
 import NearbyVenuesEventsCard from "./components/NearbyVenuesEventsCard";
+import MyPlans from "./pages/MyPlans";
+import PlanCard from "./components/PlanCard";
 
 //TODO: Implement Authentication
 // Fake authentication function
@@ -52,6 +54,10 @@ const routes = [
         path: "wishlist",
         element: <MyWishlist />,
       },
+      {
+        path: "plans",
+        element: <MyPlans />,
+      },
     ],
   },
   {
@@ -60,7 +66,7 @@ const routes = [
     children: [
       {
         path: "",
-        element: <NearbyVenuesEventsCard />,
+        element: <PlanCard />,
       },
     ],
   },
