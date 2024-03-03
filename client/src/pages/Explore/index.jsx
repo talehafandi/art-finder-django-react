@@ -7,6 +7,7 @@ import CollectionsIcon from "@mui/icons-material/Collections";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import Search from "../../components/Search";
 import EventVenueCard from "../../components/EventVenueCard";
+import MapUi from "../../components/Map";
 
 const Explore = (props) => {
   return (
@@ -67,6 +68,11 @@ const Explore = (props) => {
         <div className="list-container">
           <EventVenueCard />
         </div>
+      </div>
+      <div className="container-right">
+        <div className="gradient-top"></div>
+        <MapUi className="map-ui" />
+        <div className="gradient-bottom"></div>
       </div>
     </div>
   );

@@ -2,19 +2,29 @@
   width: 100%;
   display: flex;
   overflow: auto;
-  min-height: 100vh;
-  flex-direction: column;
+  height: calc(100vh - 62px);
   padding-left: 50px;
+
+  .container-left {
+    width: 40vw;
+    display: flex;
+    overflow: auto;
+    height: calc(100vh - 62px);
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
+  }
+  .container-right {
+    width: 60vw;
+    display: flex;
+    overflow: auto;
+    height: calc(100vh - 62px);
+    align-items: center;
+    flex-direction: column;
+    padding-left: 20px;
+  }
 }
-.container-left {
-  width: 40vw;
-  display: flex;
-  overflow: auto;
-  min-height: 100vh;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 30px;
-}
+
 .exploresearchcategories {
   gap: 22px;
   width: 100%;
@@ -94,5 +104,31 @@
   display: flex;
   max-height: calc(100vh - 220px - 62px);
   overflow-y: scroll;
-  padding-top: 10px;
+  padding: 10px 20px 20px 0;
+}
+
+.map-ui {
+  position: relative;
+  box-shadow: inset 10px 4px 9px rgba(0, 0, 0, 0.2);
+}
+
+.gradient-top {
+  position: absolute;
+  width: 60vw;
+  height: 128px;
+  background: linear-gradient(180deg, #ffffff 28%, rgba(255, 255, 255, 0) 100%);
+  z-index: 3;
+}
+
+.gradient-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 60vw;
+  height: 128px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 40.47%,
+    #ffffff 100%
+  );
+  z-index: 3;
 }
