@@ -17,6 +17,7 @@ class UserModelManager(BaseUserManager):
         if not username:
             # if USERNAME is not entered, generate by EMAIL USERNAME
             username = email.split('@')[0]
+        print("user.model.py - USERNAME: ", username)
 
         #?: Add Validation for fields
 
