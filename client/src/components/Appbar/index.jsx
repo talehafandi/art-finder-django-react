@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
 import { Typography } from "@mui/joy";
-import { NavLink as RouterLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Avatar, Button } from "@mui/material";
 import avatar from "../../assets/avatar.png";
 import Userbox from "./userbox";
@@ -29,7 +29,7 @@ export const AppBar = () => {
       </div>
       <div className="menu-wrapper">
         <Button
-          component={RouterLink}
+          component={NavLink}
           to=""
           className="menu-item"
           activeClassname="active"
@@ -37,7 +37,7 @@ export const AppBar = () => {
           Explore
         </Button>
         <Button
-          component={RouterLink}
+          component={NavLink}
           to=""
           className="menu-item"
           activeClassname="active"
@@ -45,7 +45,7 @@ export const AppBar = () => {
           My Plans
         </Button>
         <Button
-          component={RouterLink}
+          component={NavLink}
           to=""
           className="menu-item"
           activeClassname="active"

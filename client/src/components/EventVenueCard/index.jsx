@@ -5,6 +5,7 @@ import "./index.css";
 import favouriteIcon from "../../assets/favorite-heart.svg";
 import calendarIcon from "../../assets/calendar.svg";
 import mapIcon from "../../assets/map.svg";
+import { PrimaryButton } from "../Buttons";
 
 //TODO: Update 'Book a seat' button
 // TODO: Update wishlist button to a MUI fab button
@@ -46,11 +47,14 @@ const EventVenueCard = (props) => {
         </div>
         <div className="bookseatviewonmap">
           {/* Todo: Replace the button below with a MUI button */}
-          <div className="bookaseat">
-            <span className="text07">
-              <span>Book A Seat</span>
-            </span>
-          </div>
+          <PrimaryButton
+            fullWidth
+            size="small"
+            sx={{ marginBottom: "5%", width: "125px" }}
+            className="book-a-seat-btn"
+          >
+            Book a seat
+          </PrimaryButton>
           <span className="click-to-view-map">
             <span>Click to view on map...</span>
           </span>
