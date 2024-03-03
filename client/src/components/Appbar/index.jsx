@@ -30,7 +30,7 @@ export const AppBar = () => {
       <div className="menu-wrapper">
         <Button
           component={RouterLink}
-          to="/explore"
+          to=""
           className="menu-item"
           activeClassname="active"
         >

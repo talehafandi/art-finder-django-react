@@ -37,29 +37,15 @@ const ProtectedRoute = ({ element, ...rest }) => {
 const routes = [
   {
     path: "",
-    element: <Navigate to="explore" replace />,
-  },
-  {
-    path: "auth",
-    element: <BaseLayout />,
-    children: [
-      {
-        path: "",
-        element: <Navigate to="signin" />,
-      },
-      {
-        path: "signin",
-        element: <AuthDialog />,
-      },
-    ],
-  },
-  {
-    path: "explore",
     element: <AppbarLayout />,
     children: [
       {
         path: "",
         element: <Explore />,
+      },
+      {
+        path: "signin",
+        element: <AuthDialog />,
       },
     ],
   },
