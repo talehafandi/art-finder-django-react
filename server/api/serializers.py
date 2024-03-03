@@ -6,7 +6,7 @@ from .utils import generate_avatar
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:
         model = UserModel
-        fields = ['username', 'email', 'password', 'first_name', 'last_name']  # Include 'username' in fields
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'avatar_url']  # Include 'username' in fields
 
     def create(self, validated_data):
         # Hash the password before creating the user
