@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models.user import UserModel
-
+from .utils import generate_avatar
 
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -11,6 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Hash the password before creating the user
         validated_data['password'] = make_password(validated_data['password'])
+        
+        fullname = validated_data['first_name'] + " " + validated_data['last_name']
+        avatar_url = generate_avatar(fullname)
+        # print(avatar_url)
+
+        validated_data['avatar_url'] = avatar_url
+        print("validated_data: ", validated_data)
+
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -22,11 +30,10 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # Customize the representation of the serialized data
         data = super().to_representation(instance)
-        # Pick certain fields to include in the response
+        # pick certain fields should not be included in the response
+        excluded_fields = ['password']
+
         response_data = {
-            'email': data['email'],
-            'username': data['username'],
-            'avatar_url': data['avatar_url'] if 'avatar_url' in data else None
-            # Include other fields you want to return
+            key: value for key, value in data.items() if key not in excluded_fields
         }
         return response_data

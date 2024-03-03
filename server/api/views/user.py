@@ -4,11 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.shortcuts import get_object_or_404
 from ..models.user import UserModel
 from rest_framework.authtoken.models import Token
 
 from ..serializers import UserSerializer
+
 
 @api_view(['POST'])
 def signup(request):
@@ -20,16 +20,16 @@ def signup(request):
     if serializer.is_valid() == False:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    try:
+    try:        
         serializer.save()
         user = UserModel.objects.get(email=request.data['email'])
+        print("USER: ", serializer.data)
         token = Token.objects.create(user=user)
 
         return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
     except Exception as e:
         print("ERROR: ", e)
         return Response({'message': e}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['POST'])
 def login(request):
