@@ -46,7 +46,7 @@ export const AppBar = () => {
         </Button>
         <Button
           component={NavLink}
-          to=""
+          to="wishlist"
           className="menu-item"
           activeClassname="active"
         >

@@ -1,0 +1,93 @@
+.wishlist-card-container {
+  width: 254px;
+  height: 329px;
+  display: flex;
+  padding: 15px;
+  position: relative;
+  align-self: center;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 10px;
+}
+.event-venue-card-image {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 254px;
+  bottom: 0px;
+  height: 329px;
+  margin: auto;
+  z-index: 1;
+  position: absolute;
+  border-radius: 20px;
+}
+.wishlist-card-content {
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 254px;
+  bottom: 0px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+  position: absolute;
+  align-items: flex-end;
+  padding: 15px 15px 20px;
+  flex-direction: column;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(14, 14, 14, 0.8) 78%
+  );
+  border-radius: 20px;
+}
+.wishlisted-filled {
+  width: 28px;
+  height: 26px;
+}
+.wishlist-card-details {
+  gap: 8px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  .event-venue-name {
+    color: rgba(255, 255, 255, 1);
+    width: 215px;
+    height: auto;
+    font-size: 20px;
+    font-style: Bold;
+    text-align: left;
+    font-weight: 700;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+  }
+  .short-description {
+    color: rgba(255, 255, 255, 1);
+    width: 216px;
+    height: auto;
+    font-size: 16px;
+    text-align: left;
+    font-weight: 400;
+  }
+  .location {
+    gap: 7px;
+    display: flex;
+    align-items: center;
+    .location-name {
+      color: rgba(99, 32, 238, 1);
+      width: 105px;
+      height: auto;
+      font-size: 12px;
+      font-style: Regular;
+      text-align: left;
+      font-family: Montserrat;
+      font-weight: 400;
+      line-height: normal;
+      font-stretch: normal;
+      text-decoration: none;
+    }
+  }
+}

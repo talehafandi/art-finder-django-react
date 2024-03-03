@@ -4,11 +4,12 @@ import { Navigate } from "react-router-dom";
 //Import layouts
 import BaseLayout from "./components/Layouts/BaseLayout";
 import AppbarLayout from "./components/Layouts/AppbarLayout";
+import WishlistCard from "./components/WishlistCard";
 
 //Import pages
 import AuthDialog from "./pages/Auth";
-import EventVenueCard from "./components/EventVenueCard";
 import Explore from "./pages/Explore";
+import MyWishlist from "./pages/MyWishlist";
 
 //TODO: Implement Authentication
 // Fake authentication function
@@ -47,17 +48,11 @@ const routes = [
         path: "signin",
         element: <AuthDialog />,
       },
+      {
+        path: "wishlist",
+        element: <MyWishlist />,
+      },
     ],
-  },
-  {
-    path: "plans",
-    element: <ProtectedRoute element={<BaseLayout />} />,
-    // children: [
-    //   {
-    //     path: "",
-    //     element: <MyPlans/>
-    //   },
-    // ],
   },
   {
     path: "test",
@@ -65,7 +60,7 @@ const routes = [
     children: [
       {
         path: "",
-        element: <EventVenueCard />,
+        element: <WishlistCard />,
       },
     ],
   },
