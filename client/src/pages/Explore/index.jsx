@@ -1,3 +1,5 @@
-export const Explore = () => {
+const Explore = () => {
   return <></>;
 };
+
+export default Explore;

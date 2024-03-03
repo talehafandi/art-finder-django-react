@@ -6,8 +6,9 @@ import BaseLayout from "./components/Layouts/BaseLayout";
 import AppbarLayout from "./components/Layouts/AppbarLayout";
 
 //Import pages
-import { Explore } from "./pages/Explore";
 import AuthDialog from "./pages/Auth";
+import EventVenueCard from "./components/EventVenueCard";
+import Explore from "./pages/Explore";
 
 //TODO: Implement Authentication
 // Fake authentication function
@@ -71,6 +72,16 @@ const routes = [
     //     element: <MyPlans/>
     //   },
     // ],
+  },
+  {
+    path: "test",
+    element: <BaseLayout />,
+    children: [
+      {
+        path: "",
+        element: <EventVenueCard />,
+      },
+    ],
   },
 ];
 
