@@ -1,0 +1,29 @@
+@import "../../theme/variables.css";
+
+.app-bar {
+  background-color: var(--primary-color);
+  height: 62px;
+  display: flex;
+  width: 100vw;
+  justify-content: space-between;
+  padding: 5px 30px;
+  .menu-wrapper {
+    display: flex;
+    justify-content: center;
+    .menu-item {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      white-space: nowrap;
+      padding: 0 10px 0 10px;
+    }
+    .menu-item .active {
+      font-weight: 700;
+      color: #3e1d83;
+    }
+    .menu-item:hover {
+      color: var(--secondary-light);
+    }
+  }
+}

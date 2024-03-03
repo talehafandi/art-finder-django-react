@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import "./index.css";
 import googleIcon from "../../assets/google-icon.png";
 import signInBg from "../../assets/sign-in-bg.png";
-import { Box, Button } from "@mui/material";
 import {
   PrimaryAltButton,
   PrimaryButton,

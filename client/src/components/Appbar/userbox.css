@@ -1,0 +1,56 @@
+.userbox-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.userbox-userbox {
+  gap: 8px;
+  width: 247px;
+  height: auto;
+  display: flex;
+  align-items: center;
+}
+.userbox-ellipse2 {
+  width: 40px;
+  height: 40px;
+}
+.userbox-group3 {
+  width: 168px;
+  height: 34px;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-shrink: 1;
+}
+.userbox-text {
+  color: rgba(255, 255, 255, 1);
+  height: auto;
+  position: absolute;
+  font-size: 16px;
+  font-style: Regular;
+  text-align: left;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.userbox-text2 {
+  top: 17px;
+  color: rgba(234, 226, 183, 1);
+  height: auto;
+  position: absolute;
+  font-size: 14px;
+  font-style: Regular;
+  text-align: left;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.userbox-expanddown {
+  width: 23px;
+  height: 24px;
+}
