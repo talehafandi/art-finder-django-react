@@ -1,5 +1,4 @@
 from django.db import models
-# Create your models here.
 
 # ITINERARY MODEL
 class ItineraryModel(models.Model):
@@ -10,7 +9,7 @@ class ItineraryModel(models.Model):
     description = models.CharField(max_length=MAX_DESCRIPTION_LENGTH)
     start_date = models.DateField()
     end_date = models.DateField()
-    # user = models.ForeignKey("UserModel", on_delete=models.CASCADE, related_name='itineraries')
+    user = models.ForeignKey("UserModel", on_delete=models.CASCADE, related_name='itineraries')
     events = models.ManyToManyField("EventModel", related_name='itineraries')
     venues = models.ManyToManyField("VenueModel", related_name='itineraries')
 

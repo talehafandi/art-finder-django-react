@@ -9,7 +9,7 @@ app_name = 'api'
 
 # Add the app specific URLs
 urlpatterns = [
-    path('test/', test),
-    path('signup/', signup)
+    # path('test/', test),
+    # path('signup/', signup),
     # path('login/', admin.site.urls),
 ]
