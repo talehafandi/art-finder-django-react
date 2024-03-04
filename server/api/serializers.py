@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'first_name', 'last_name', 'avatar_url']  # Include 'username' in fields
 
     def create(self, validated_data):
+
         # Hash the password before creating the user
         validated_data['password'] = make_password(validated_data['password'])
         
@@ -31,7 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
         # Customize the representation of the serialized data
         data = super().to_representation(instance)
         # pick certain fields should not be included in the response
-        excluded_fields = ['password']
+        excluded_fields = ['password', 'forgot_pass_otp', 'forgot_pass_otp_expiry']
 
         response_data = {
             key: value for key, value in data.items() if key not in excluded_fields

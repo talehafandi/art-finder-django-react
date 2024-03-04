@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.core.validators import MaxValueValidator
 
 
 class UserModelManager(BaseUserManager):
@@ -50,6 +51,8 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
         max_length=20, choices=ROLE_CHOICES, default=USER_ROLE)
     avatar_url = models.URLField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    forgot_pass_otp = models.IntegerField(blank=True, null=True, validators=[MaxValueValidator(999999)])
+    forgot_pass_otp_expiry = models.DateTimeField(blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
