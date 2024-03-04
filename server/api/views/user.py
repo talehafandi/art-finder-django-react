@@ -3,6 +3,8 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import check_password
+
 
 from ..models.user import UserModel
 from rest_framework.authtoken.models import Token
@@ -35,7 +37,7 @@ def signup(request):
 def login(request):
     try:
         user = UserModel.objects.get(username=request.data['username'])
-
+        # print("USER: ", user.get('password'))
         if not user.check_password(request.data['password']):
             raise UserModel.DoesNotExist
 
@@ -50,6 +52,24 @@ def login(request):
     except Exception as error:
         print("ERROR: ", error)
         return Response({"message": "UNKNOWN_ERROR_HAPPENED"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def change_password(request):
+    current_password = str(request.data['current_password'])
+    new_password = str(request.data['new_password'])
+
+    user = UserModel.objects.get(username=request.data['username'])
+
+    # Check if current password matches
+    if not check_password(current_password, user.password):
+        return Response({'error': 'INVALID_CREDENTIALS'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Update user's password
+    user.set_password(new_password)
+    user.save()
+
+    return Response({'message': 'Password changed successfully'})
+
 
 @api_view(['GET'])
 def test(request):
