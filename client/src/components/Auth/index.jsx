@@ -9,9 +9,11 @@ import {
   PrimaryButton,
   SecondaryOutlinedButton,
 } from "../Buttons";
-// import useStyles from "../../theme/schemes/default";
+import { useAppContext } from "../../context/appContext";
 
 export const Auth = () => {
+  const { authPopupVisibility } = useAppContext();
+
   return (
     <div className="sign-in-wrapper">
       <div className="left-side">
@@ -63,7 +65,7 @@ export const Auth = () => {
       </div>
 
       <div className="right-side">
-        <div className="close-btn-wrapper">
+        <div className="close-btn-wrapper" onClick={authPopupVisibility(false)}>
           <svg
             width="15"
             height="20"
