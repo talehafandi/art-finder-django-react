@@ -65,7 +65,10 @@ export const Auth = () => {
       </div>
 
       <div className="right-side">
-        <div className="close-btn-wrapper" onClick={authPopupVisibility(false)}>
+        <div
+          className="close-btn-wrapper"
+          onClick={() => authPopupVisibility(false)}
+        >
           <svg
             width="15"
             height="20"
@@ -110,14 +113,14 @@ export const Auth = () => {
           <div className="text-wrapper">Or</div>
           <SecondaryOutlinedButton
             startIcon={<img src={googleIcon}></img>}
-            fullwidth
+            fullWidth
             sx={{ marginBottom: "5%" }}
           >
             SIGN IN WITH GOOGLE
           </SecondaryOutlinedButton>
           <SecondaryOutlinedButton
             variant="outlined"
-            fullwidth
+            fullWidth
             sx={{ marginBottom: "5%" }}
           >
             REGISTER AS AN ORGANISER
