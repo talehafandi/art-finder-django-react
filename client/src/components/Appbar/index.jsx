@@ -32,7 +32,7 @@ export const AppBar = () => {
           component={NavLink}
           to=""
           className="menu-item"
-          activeClassname="active"
+          activeClassName="active"
         >
           Explore
         </Button>
@@ -40,7 +40,7 @@ export const AppBar = () => {
           component={NavLink}
           to="plans"
           className="menu-item"
-          activeClassname="active"
+          activeClassName="active"
         >
           My Plans
         </Button>
@@ -48,7 +48,7 @@ export const AppBar = () => {
           component={NavLink}
           to="wishlist"
           className="menu-item"
-          activeClassname="active"
+          activeClassName="active"
         >
           My Wishlist
         </Button>

@@ -18,12 +18,14 @@
       white-space: nowrap;
       padding: 0 10px 0 10px;
     }
-    .menu-item .active {
-      font-weight: 700;
-      color: #3e1d83;
-    }
+
     .menu-item:hover {
       color: var(--secondary-light);
+    }
+
+    .active {
+      font-weight: 700;
+      color: #3e1d83 !important;
     }
   }
 }
