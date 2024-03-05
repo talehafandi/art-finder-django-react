@@ -28,28 +28,13 @@ export const AppBar = () => {
         </div>
       </div>
       <div className="menu-wrapper">
-        <Button
-          component={NavLink}
-          to=""
-          className="menu-item"
-          activeClassName="active"
-        >
+        <Button component={NavLink} to="" className="menu-item">
           Explore
         </Button>
-        <Button
-          component={NavLink}
-          to="plans"
-          className="menu-item"
-          activeClassName="active"
-        >
+        <Button component={NavLink} to="plans" className="menu-item">
           My Plans
         </Button>
-        <Button
-          component={NavLink}
-          to="wishlist"
-          className="menu-item"
-          activeClassName="active"
-        >
+        <Button component={NavLink} to="wishlist" className="menu-item">
           My Wishlist
         </Button>
       </div>
