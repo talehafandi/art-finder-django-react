@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import "./index.css";
@@ -10,9 +10,16 @@ import {
   SecondaryOutlinedButton,
 } from "../Buttons";
 import { useAppContext } from "../../context/appContext";
+import { Checkbox } from "@mui/material";
 
 export const Auth = () => {
   const { authPopupVisibility } = useAppContext();
+  const [authView, setAuthView] = useState("signin");
+
+  const toggleAuthView = () => {
+    if (authView == "signin") setAuthView("signup");
+    else setAuthView("signin");
+  };
 
   return (
     <div className="sign-in-wrapper">
@@ -33,11 +40,16 @@ export const Auth = () => {
                 paddingLeft: "10%",
               }}
             >
-              Are you new here?
+              {authView == "signin" && "Are you new here?"}
+              {authView == "signup" && "Already have an account?"}
             </Typography>
             <div className="sign-up">
-              <PrimaryAltButton sx={{ width: "150px", marginTop: "20px" }}>
-                SIGN UP
+              <PrimaryAltButton
+                sx={{ width: "150px", marginTop: "20px" }}
+                onClick={() => toggleAuthView()}
+              >
+                {authView == "signin" && "SIGN UP"}
+                {authView == "signup" && "SIGN IN"}
               </PrimaryAltButton>
               {/* <Button variant="contained" color="primary">
               SIGN UP
@@ -83,48 +95,132 @@ export const Auth = () => {
           </svg>
         </div>
         <div className="sign-in-form-wrapper">
-          <div className="sign-in-text">Sign In</div>
-          <div className="sign-in-form">
-            <TextField
-              className="text-field-instance"
-              id="email"
-              label="Email"
-              variant="standard"
-              size="medium"
-              value="spiralmonkey@gmail.com"
-              sx={{ marginBottom: "10%" }}
-            />
-            <TextField
-              className="design-component-instance-node"
-              label="Password"
-              id="password"
-              size="medium"
-              value="****************"
-              variant="standard"
-              sx={{ marginBottom: "10%" }}
-            />
+          <div className="sign-in-text">
+            {authView == "signin" && "Sign In"}
+            {authView == "signup" && "Sign Up"}
           </div>
+          {authView == "signin" && (
+            <div className="sign-in-form">
+              <TextField
+                className="text-field-instance"
+                id="email"
+                label="Email"
+                variant="standard"
+                size="medium"
+                value="spiralmonkey@gmail.com"
+                sx={{ marginBottom: "10%" }}
+              />
+              <TextField
+                className="design-component-instance-node"
+                label="Password"
+                id="password"
+                size="medium"
+                value="****************"
+                variant="standard"
+                sx={{ marginBottom: "10%" }}
+              />
+            </div>
+          )}
+          {authView == "signup" && (
+            <div className="sign-in-form">
+              <div className="name-wrapper">
+                <TextField
+                  className="text-field-instance"
+                  id="first-name"
+                  label="First Name"
+                  variant="standard"
+                  size="medium"
+                  sx={{ marginBottom: "10%" }}
+                  fullWidth
+                  value="Mahesh"
+                />
+                <TextField
+                  className="text-field-instance"
+                  id="last-name"
+                  label="Last Name"
+                  variant="standard"
+                  size="medium"
+                  sx={{ marginBottom: "10%" }}
+                  fullWidth
+                  value="Adhikari"
+                />
+              </div>
+              <TextField
+                className="text-field-instance"
+                id="email"
+                label="Email"
+                variant="standard"
+                size="medium"
+                value="spiralmonkey@gmail.com"
+                sx={{ marginBottom: "10%" }}
+              />
+              <TextField
+                className="design-component-instance-node"
+                label="Password"
+                id="password"
+                size="medium"
+                value="****************"
+                variant="standard"
+                sx={{ marginBottom: "10%" }}
+              />
+              <div className="tac-check">
+                <Checkbox size="small" />
+                <span>
+                  I have read and I accept the{" "}
+                  <a
+                    href="http://"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tac-link"
+                  >
+                    T&Cs
+                  </a>
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="auth-options">
-          <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
-            SIGN IN
-          </PrimaryButton>
+          {authView == "signin" && (
+            <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
+              SIGN IN
+            </PrimaryButton>
+          )}
+          {authView == "signup" && (
+            <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
+              SIGN UP
+            </PrimaryButton>
+          )}
           <div className="text-wrapper">Or</div>
-          <SecondaryOutlinedButton
-            startIcon={<img src={googleIcon}></img>}
-            fullWidth
-            sx={{ marginBottom: "5%" }}
-          >
-            SIGN IN WITH GOOGLE
-          </SecondaryOutlinedButton>
-          <SecondaryOutlinedButton
-            variant="outlined"
-            fullWidth
-            sx={{ marginBottom: "5%" }}
-          >
-            REGISTER AS AN ORGANISER
-          </SecondaryOutlinedButton>
+
+          {authView == "signin" && (
+            <>
+              <SecondaryOutlinedButton
+                startIcon={<img src={googleIcon}></img>}
+                fullWidth
+                sx={{ marginBottom: "5%" }}
+              >
+                SIGN IN WITH GOOGLE
+              </SecondaryOutlinedButton>
+              <SecondaryOutlinedButton
+                variant="outlined"
+                fullWidth
+                sx={{ marginBottom: "5%" }}
+              >
+                REGISTER AS AN ORGANISER
+              </SecondaryOutlinedButton>
+            </>
+          )}
+          {authView == "signup" && (
+            <SecondaryOutlinedButton
+              startIcon={<img src={googleIcon}></img>}
+              fullWidth
+              sx={{ marginBottom: "5%" }}
+            >
+              SIGN UP WITH GOOGLE
+            </SecondaryOutlinedButton>
+          )}
         </div>
       </div>
     </div>
