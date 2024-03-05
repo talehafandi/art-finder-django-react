@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Outlet } from "react-router-dom";
 
 import { Box } from "@mui/material";
-import { AppBar } from "../../Appbar";
+import AppBar from "../../Appbar";
 import { AppProvider } from "../../../context/appContext";
 import AuthDialog from "../../../pages/Auth";
 

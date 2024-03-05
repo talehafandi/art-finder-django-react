@@ -29,6 +29,8 @@
   padding: 0;
   margin: 0;
   flex: 1;
+  overflow: hidden;
+  border-radius: 20px;
   .auth-image {
     /* position: absolute; */
     /* top: 0;

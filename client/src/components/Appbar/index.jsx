@@ -2,11 +2,11 @@ import React from "react";
 import "./index.css";
 import { Typography } from "@mui/joy";
 import { NavLink } from "react-router-dom";
-import { Avatar, Button } from "@mui/material";
-import avatar from "../../assets/avatar.png";
 import Userbox from "./userbox";
+import Button from "@mui/material/Button";
+// import { useAppContext } from "../../context/appContext";
 
-export const AppBar = () => {
+const AppBar = () => {
   return (
     <div className="app-bar">
       <div className="logo-wrapper">
@@ -42,3 +42,5 @@ export const AppBar = () => {
     </div>
   );
 };
+
+export default AppBar;
