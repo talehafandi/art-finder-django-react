@@ -10,29 +10,40 @@
   border-radius: 20px;
   z-index: -3;
   flex: 1;
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .left-side {
   width: 40%;
-  max-width: 500;
+  max-width: 500px;
+  height: 624px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
   position: relative;
   min-height: 200px;
   min-width: 400px;
   padding: 0;
   margin: 0;
   flex: 1;
+  .auth-image {
+    /* position: absolute; */
+    /* top: 0;
+    left: 0; */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
   .overlap-wrapper {
     position: absolute;
     left: 0;
     top: 0;
     z-index: 1;
-    object-fit: span;
     height: 100%;
+    width: 100%;
     .overlap {
       margin-top: 40%;
     }
@@ -45,14 +56,16 @@
 
 .right-side {
   width: 60%;
+  height: 624px;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  /* flex: 1; */
   max-width: 500px;
   .close-btn-wrapper {
     width: 100%;
     display: flex;
-    align-self: flex-start;
+    padding: 20px;
+    cursor: pointer;
     svg {
       margin-left: auto;
     }
@@ -62,6 +75,7 @@
     display: flex;
     flex-direction: column;
     margin: 0 auto 0 auto;
+    margin-bottom: auto;
     .text-wrapper {
       width: 100%;
       text-align: center;
@@ -83,12 +97,9 @@
   width: 100%;
 }
 
-/* .overlap {
-  margin-top: 30%;
-} */
-
 .sign-in-form-wrapper {
   padding: 0 10% 0 10%;
+  margin-top: auto;
   .sign-in-text {
     margin-top: 2%;
     font-weight: 200;
