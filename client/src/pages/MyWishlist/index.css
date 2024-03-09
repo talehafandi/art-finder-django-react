@@ -14,6 +14,7 @@
       display: flex;
       flex-wrap: wrap;
       overflow-y: scroll;
+      max-height: 480px;
     }
   }
 

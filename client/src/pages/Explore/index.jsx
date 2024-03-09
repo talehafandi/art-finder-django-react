@@ -5,9 +5,11 @@ import TextField from "@mui/material/TextField";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CollectionsIcon from "@mui/icons-material/Collections";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
 import Search from "../../components/Search";
 import EventVenueCard from "../../components/EventVenueCard";
 import MapUi from "../../components/Map";
+import SculptureIcon from "../../components/Icons/SculptureIcon";
 
 const Explore = (props) => {
   const list = [{}, {}, {}, {}];
@@ -54,7 +56,7 @@ const Explore = (props) => {
             </div>
             <div className="category-menu" alt="sculptures">
               <div className="category-icon">
-                <CollectionsIcon fontSize="large" />
+                <SculptureIcon sx={{ fontSize: 40 }} />
               </div>
               <span className="category-text">
                 <span>Sculptures</span>
@@ -62,7 +64,7 @@ const Explore = (props) => {
             </div>
             <div className="category-menu" alt="crafts">
               <div className="category-icon">
-                <CollectionsIcon fontSize="large" />
+                <ContentCutIcon fontSize="large" />
               </div>
               <span className="category-text">
                 <span>Crafts</span>

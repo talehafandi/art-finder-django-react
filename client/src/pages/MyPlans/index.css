@@ -20,6 +20,7 @@
       overflow-y: scroll;
       overflow-x: hidden;
       box-sizing: border-box;
+      max-height: 380px;
     }
   }
 
@@ -52,6 +53,11 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.my-itinerary-wrapper {
+  margin-top: 40px;
+}
+
 .plan-header,
 .itinerary-header {
   color: rgba(0, 0, 0, 1);
@@ -64,6 +70,8 @@
   font-stretch: normal;
   text-decoration: none;
   margin-bottom: 15px;
+  width: 100%;
+  justify-content: space-between;
 }
 .pills {
   display: flex;
@@ -179,4 +187,5 @@
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
+  max-height: 500px;
 }
