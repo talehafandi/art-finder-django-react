@@ -15,6 +15,7 @@
   flex-direction: column;
   justify-content: center;
   background-color: rgba(255, 255, 255, 1);
+  cursor: pointer;
 }
 
 .card-title-wrapper {
@@ -156,6 +157,7 @@
     display: flex;
     padding: 0 2px;
     align-items: center;
+    gap: 15px;
     .bookaseat {
       width: 105px;
       display: flex;
@@ -190,6 +192,7 @@
       line-height: normal;
       font-stretch: normal;
       text-decoration: none;
+      cursor: pointer;
     }
   }
 }

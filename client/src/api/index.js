@@ -30,6 +30,7 @@ export const makeApiCallAndUpdateStore = async (
 
 const restApi = {
   getDataOnExplore: makeApiCallAndUpdateStore("GET", "./", {}),
+  getDataOnWishlist: makeApiCallAndUpdateStore("GET", "./", {}),
 };
 
 export default restApi;

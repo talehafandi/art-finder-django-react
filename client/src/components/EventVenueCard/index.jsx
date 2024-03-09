@@ -50,7 +50,10 @@ const EventVenueCard = (props) => {
           <PrimaryButton
             fullWidth
             size="small"
-            sx={{ marginBottom: "5%", width: "125px" }}
+            sx={{
+              width: "125px",
+              height: "32px !important",
+            }}
             className="book-a-seat-btn"
           >
             Book a seat

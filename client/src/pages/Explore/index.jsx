@@ -10,6 +10,11 @@ import EventVenueCard from "../../components/EventVenueCard";
 import MapUi from "../../components/Map";
 
 const Explore = (props) => {
+  const list = [{}, {}, {}, {}];
+  const renderList = () => {
+    return list.map((item) => <EventVenueCard />);
+  };
+
   return (
     <div className="container">
       <div className="container-left">
@@ -65,9 +70,7 @@ const Explore = (props) => {
             </div>
           </div>
         </div>
-        <div className="list-container">
-          <EventVenueCard />
-        </div>
+        <div className="list-container">{renderList()}</div>
       </div>
       <div className="container-right">
         <div className="gradient-top"></div>
