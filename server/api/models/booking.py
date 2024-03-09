@@ -10,5 +10,5 @@ class BookingModel(models.Model):
         unique_together = ('user', 'event')  # Ensure uniqueness of user-event pair
 
     def __str__(self):
-        return f'{self.user.username} booked for {self.event}'
+        return self.name
 

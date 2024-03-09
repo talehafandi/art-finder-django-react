@@ -17,8 +17,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = EventModel
 
         # to add image field
-        fields = ['title', 'description', 'venue','date', 'start_time', 'end_time', 'event_category', 'fee']
-        # exclude = ['venue']
+        fields = ['title', 'description','date', 'start_time', 'end_time', 'event_category', 'fee']
 
 class ItinerarySerializer(serializers.ModelSerializer):
     class Meta:

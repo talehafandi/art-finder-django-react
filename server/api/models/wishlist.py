@@ -6,4 +6,4 @@ class WishlistModel(models.Model):
     venues = models.ManyToManyField("VenueModel", related_name='wishlists')
 
     def __str__(self):
-        return f'Wishlist of {self.user.username}'
+        return self.name
