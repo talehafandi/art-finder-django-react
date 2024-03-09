@@ -1,4 +1,6 @@
 import { alpha, createTheme, lighten, darken } from "@mui/material";
+import React from "react";
+import { makeStyles } from "@mui/styles";
 // import "@mui/lab/themeAugmentation";
 
 const themeColors = {
@@ -8,7 +10,7 @@ const themeColors = {
   warning: "",
   error: "",
   info: "",
-  white: "",
+  white: "#FFFFFF",
   primaryAlt: "",
   black: "#2C2C2C",
 };
@@ -37,11 +39,17 @@ export const DefaultTheme = createTheme({
       light: lighten(themeColors.primary, 0.3),
       main: themeColors.primary,
       dark: darken(themeColors.primary, 0.2),
+      contrastText: themeColors.white,
     },
     secondary: {
       light: lighten(themeColors.secondary, 0.25),
       main: themeColors.secondary,
       dark: darken(themeColors.secondary, 0.2),
+      contrastText: themeColors.white,
+    },
+    common: {
+      black: themeColors.black,
+      white: themeColors.white,
     },
   },
   //@ts-ignore
@@ -127,4 +135,40 @@ export const DefaultTheme = createTheme({
       textTransform: "uppercase",
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "50px",
+          padding: "0 5% 0 5%",
+        },
+        containedPrimary: {
+          backgroundColor: themeColors.primary,
+          color: themeColors.white,
+          border: "none",
+        },
+        containedSecondary: {
+          backgroundColor: themeColors.secondary,
+          color: themeColors.white,
+          border: "none",
+        },
+        outlinedPrimary: {
+          backgroundColor: themeColors.white,
+          color: themeColors.black,
+        },
+      },
+    },
+  },
 });
+
+// Define custom styles
+const useStyles = makeStyles({
+  customButton: {
+    backgroundColor: "#ffffff",
+    color: "#000000",
+    padding: "10px 20px", // Padding for the button
+    borderRadius: "50px", // Border radius
+  },
+});
+
+export default useStyles;

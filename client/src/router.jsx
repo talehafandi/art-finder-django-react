@@ -6,7 +6,12 @@ import BaseLayout from "./components/Layouts/BaseLayout";
 import AppbarLayout from "./components/Layouts/AppbarLayout";
 
 //Import pages
-import { Explore } from "./pages/Explore";
+import AuthDialog from "./pages/Auth";
+import Explore from "./pages/Explore";
+import MyWishlist from "./pages/MyWishlist";
+import NearbyVenuesEventsCard from "./components/NearbyVenuesEventsCard";
+import MyPlans from "./pages/MyPlans";
+import PlanCard from "./components/PlanCard";
 
 //TODO: Implement Authentication
 // Fake authentication function
@@ -35,36 +40,36 @@ const ProtectedRoute = ({ element, ...rest }) => {
 const routes = [
   {
     path: "",
-    element: <Navigate to="explore" replace />,
-  },
-  {
-    path: "auth",
-    element: <BaseLayout />,
-    // children: [
-    //   {
-    //     path: "signin",
-    //     element:
-    //   },
-    // ],
-  },
-  {
-    path: "explore",
     element: <AppbarLayout />,
     children: [
       {
         path: "",
         element: <Explore />,
       },
+      {
+        path: "signin",
+        element: <AuthDialog />,
+      },
+      {
+        path: "wishlist",
+        element: <MyWishlist />,
+      },
+      {
+        path: "plans",
+        element: <MyPlans />,
+      },
     ],
   },
   {
-    path: "plans",
-    element: <ProtectedRoute element={<BaseLayout />} />,
-    // children: [
-    //   {
-    //     path: "",
-    //     element: <MyPlans/>
-    //   },
-    // ],
+    path: "test",
+    element: <BaseLayout />,
+    children: [
+      {
+        path: "",
+        element: <PlanCard />,
+      },
+    ],
   },
 ];
+
+export default routes;

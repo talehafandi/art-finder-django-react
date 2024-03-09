@@ -1,0 +1,202 @@
+/* Todo: Refactor CSS */
+
+.place {
+  max-width: 800px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 25px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10000000149011612);
+  align-items: center;
+  border-color: rgba(239, 239, 239, 1);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 20px;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 1);
+  cursor: pointer;
+}
+
+.card-title-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .card-title {
+    color: rgba(43, 42, 42, 1);
+    margin-right: 20px;
+    font-size: 18px;
+    font-style: Regular;
+    text-align: left;
+    font-family: Montserrat;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+  }
+  .wishlist-icon {
+    width: 28px;
+    height: 26px;
+  }
+}
+
+.date-location {
+  width: 100%;
+  display: flex;
+  margin-top: 0px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.date-wrapper {
+  gap: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.date {
+  color: rgb(131, 129, 129);
+  font-size: 12px;
+  font-style: Bold;
+  text-align: left;
+  font-family: "Montserrat";
+  font-weight: 700;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+  margin-right: 15px;
+}
+.location-wrapper {
+  gap: 8px;
+  display: flex;
+  align-items: center;
+}
+.mapfill {
+  width: 28.21480369567871px;
+  height: 24px;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.subtract {
+  top: 3px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+}
+.ellipse169 {
+  top: 14px;
+  left: 10.580551147460938px;
+  width: 2px;
+  height: 2px;
+  position: absolute;
+}
+.location {
+  color: rgb(99, 32, 238);
+  font-size: 12px;
+  font-style: Bold;
+  text-align: left;
+  font-family: "Montserrat";
+  font-weight: 700;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+  margin-right: 15px;
+}
+.event-venue-description {
+  color: rgb(131, 129, 129);
+  width: 100%;
+  height: auto;
+  font-size: 14px;
+  align-self: flex-start;
+  font-style: Regular;
+  margin-top: 10px;
+  text-align: left;
+  font-family: "Montserrat";
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.keyword-book-view-on-map {
+  width: 100%;
+  height: 31px;
+  display: flex;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  margin-bottom: 5px;
+  .keyword-wrapper {
+    gap: 10px;
+    width: 64px;
+    display: flex;
+    padding: 4px 16px;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 50px;
+    justify-content: center;
+    background-color: rgba(208, 188, 250, 1);
+    .keyword-text {
+      color: rgba(63, 63, 63, 1);
+      height: auto;
+      font-size: 11px;
+      font-style: Regular;
+      text-align: center;
+      font-family: Montserrat;
+      font-weight: 400;
+      line-height: normal;
+      font-stretch: normal;
+      text-decoration: none;
+    }
+  }
+
+  .bookseatviewonmap {
+    display: flex;
+    padding: 0 2px;
+    align-items: center;
+    gap: 15px;
+    .bookaseat {
+      width: 105px;
+      display: flex;
+      padding: 8px 14px;
+      align-items: center;
+      flex-shrink: 0;
+      border-radius: 50px;
+      justify-content: center;
+      background-color: rgba(247, 127, 0, 1);
+      margin-right: 20px;
+      .text07 {
+        color: rgba(255, 255, 255, 1);
+        height: auto;
+        font-size: 12px;
+        font-style: Bold;
+        text-align: left;
+        font-family: Montserrat;
+        font-weight: 700;
+        line-height: normal;
+        font-stretch: normal;
+        text-decoration: none;
+      }
+    }
+    .click-to-view-map {
+      color: rgba(99, 32, 238, 1);
+      height: auto;
+      font-size: 14px;
+      font-style: Regular;
+      text-align: center;
+      font-family: Montserrat;
+      font-weight: 400;
+      line-height: normal;
+      font-stretch: normal;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+}
+
+.book-a-seat-button {
+  height: 31px !important;
+}

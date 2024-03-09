@@ -1,0 +1,182 @@
+.plan-container {
+  width: 100vw;
+  display: flex;
+  overflow: scroll;
+  min-height: 100vh;
+  /* flex-direction: column; */
+  padding: 30px 50px;
+  .plan-wrapper {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+
+    .my-plan {
+      padding: 20px;
+      border-radius: 20px;
+      background-color: #f9f9f9;
+      margin-top: 25px;
+      display: flex;
+      flex-wrap: wrap;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+  }
+
+  .places-events-nearby-wrapper {
+    display: flex;
+    padding: 30px 0 30px 30px;
+    flex-direction: column;
+    .places-events-nearby-heading {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 22px;
+      color: #838181;
+    }
+    .places-events-nearby-container {
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      background: #f9f9f9;
+      border-radius: 20px;
+    }
+  }
+}
+.my-plan-wrapper,
+.my-itinerary-wrapper {
+  display: flex;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.plan-header,
+.itinerary-header {
+  color: rgba(0, 0, 0, 1);
+  display: flex;
+  font-size: 22px;
+  font-style: Bold;
+  text-align: left;
+  font-weight: 700;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+  margin-bottom: 15px;
+}
+.pills {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.order-by-type {
+  gap: 6px;
+  display: flex;
+  align-items: flex-start;
+}
+.pill {
+  display: flex;
+  padding: 4px 2px;
+  align-items: center;
+  border-radius: 50px;
+  justify-content: center;
+  color: rgba(63, 63, 63, 1);
+  background-color: rgba(208, 188, 250, 1);
+  height: auto;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+  padding: 4px 15px;
+}
+
+.pill-active {
+  background-color: rgba(99, 32, 238, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.places {
+  gap: 10px;
+  display: flex;
+  padding: 4px;
+  align-items: center;
+  border-radius: 50px;
+  justify-content: center;
+  background-color: rgba(208, 188, 250, 1);
+}
+.pill-text-2 {
+  color: rgba(63, 63, 63, 1);
+  width: 76px;
+  height: auto;
+  font-size: 14px;
+
+  text-align: center;
+
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pastevents {
+  gap: 10px;
+  display: flex;
+  padding: 4px 20px;
+  align-items: center;
+  border-radius: 50px;
+  justify-content: center;
+  background-color: rgba(208, 188, 250, 1);
+}
+
+.orderby {
+  display: flex;
+  align-items: flex-start;
+  border-color: rgba(99, 32, 238, 1);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50px;
+  flex-direction: column;
+}
+.frame4 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 15px;
+  .text-3 {
+    color: rgba(63, 63, 63, 1);
+    width: 100%;
+    font-size: 14px;
+    text-align: left;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+}
+.text08 {
+  color: rgba(63, 63, 63, 1);
+  width: 65px;
+  height: auto;
+  font-size: 14px;
+  text-align: left;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.expanddown {
+  width: 23px;
+  height: 24px;
+}
+
+.my-itinerary {
+  margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+}
