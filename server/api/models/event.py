@@ -23,7 +23,6 @@ class EventModel(models.Model):
     # Event model fields
     title = models.CharField(max_length=MAX_TITLE_LENGTH)
     description = models.CharField(max_length=MAX_DESCRIPTION_LENGTH)
-    venue = models.ForeignKey("VenueModel", on_delete=models.CASCADE, related_name="hosted_in")
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
