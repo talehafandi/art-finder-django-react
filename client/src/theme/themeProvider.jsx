@@ -1,6 +1,11 @@
+import React, { useState } from "react";
 import { themeCreator } from "./base";
+import { StylesProvider } from "@mui/styles";
+import { ThemeProvider } from "@mui/material";
 
-export const ThemeProvider = (props) => {
+const ThemeContext = React.createContext((themeName) => {});
+
+export const ThemeProviderWrapper = (props) => {
   const curThemeName = localStorage.getItem("appTheme") || "DefaultTheme";
   const [themeName, _setThemeName] = useState(curThemeName);
   const theme = themeCreator(themeName);
@@ -17,3 +22,5 @@ export const ThemeProvider = (props) => {
     </StylesProvider>
   );
 };
+
+export default ThemeProviderWrapper;
