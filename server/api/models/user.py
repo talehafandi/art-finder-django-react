@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.core.validators import MaxValueValidator
 
 
 class UserModelManager(BaseUserManager):
@@ -48,8 +49,10 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, max_length=255)
     role = models.CharField(
         max_length=20, choices=ROLE_CHOICES, default=USER_ROLE)
-    avatar_url = models.URLField(blank=True)
+    avatar_url = models.URLField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    forgot_pass_otp = models.IntegerField(blank=True, null=True, validators=[MaxValueValidator(999999)])
+    forgot_pass_otp_expiry = models.DateTimeField(blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
@@ -59,27 +62,4 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    
 
-# KINDA UTILS, DIDN'T KNOW WHERE TO PUT
-# import random
-# import requests
-# import os
-# from urllib.parse import quote
-
-# def generate_avatar(name):
-#     colors = ['f44336', 'e91e63', '9c27b0', '673ab7', '3f51b5', '2196f3', '03a9f4', '00bcd4',
-#               '009688', '4caf50', '8bc34a', 'cddc39', 'ffeb3b']
-
-#     color = random.choice(colors)
-#     encoded_name = quote(name)
-#     avatar_url = f"https://ui-avatars.com/api/?background={color}&color=fff&name={encoded_name}"
-#     filename = f"avatar-{int(time.time())}.png"
-#     file_path = os.path.join(config.fs.avatars, filename)
-
-#     # Download the image and save it
-#     response = requests.get(avatar_url)
-#     with open(file_path, 'wb') as f:
-#         f.write(response.content)
-
-#     return filename

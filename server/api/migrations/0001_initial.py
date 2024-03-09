@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('username', models.CharField(max_length=16, unique=True)),
                 ('email', models.EmailField(max_length=255, unique=True)),
                 ('role', models.CharField(choices=[('user', 'User'), ('organiser', 'Organiser'), ('admin', 'Admin')], default='user', max_length=20)),
-                ('avatar_url', models.URLField(blank=True)),
+                ('avatar_url', models.URLField(blank=True, null=True)),
                 ('is_active', models.BooleanField(default=True)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
