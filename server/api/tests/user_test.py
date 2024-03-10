@@ -4,7 +4,7 @@ from requests import Response
 from rest_framework.test import APIRequestFactory, force_authenticate
 from rest_framework.authtoken.models import Token
 from api.models import UserModel
-from api.views import signup, login, change_password, forgot_password, forgot_password_confirm, test_token
+from api.views import *
 
 class UserViewsTestCase(TestCase):
     def setUp(self):
