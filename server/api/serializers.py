@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         # print(avatar_url)
 
         validated_data['avatar_url'] = avatar_url
-        print("validated_data: ", validated_data)
+        # print("validated_data: ", validated_data)
 
         return super().create(validated_data)
 
