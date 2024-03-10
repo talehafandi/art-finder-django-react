@@ -1,25 +1,22 @@
 
 from django.urls import path
 from django.urls import re_path
-from .views.user import test
-from .views.user import signup
-from .views.user import login
-from .views.user import change_password
-from .views.user import forgot_password
-from .views.user import forgot_password_confirm
 from .views.user import MyTokenObtainPairView
+from . import views
 
 app_name = 'api'
 
 # Add the app specific URLs
 urlpatterns = [
-    path('test/', test),
-    path('signup/', signup),
-    path('login/', login),
-    path('auth/change-password', change_password),
-    path('auth/forgot-password', forgot_password),
-    path('auth/forgot-password-confirm', forgot_password_confirm),
+    path('test/', views.test),
+    path('auth/signup/', views.signup),
+    path('auth/login/', views.login),
+    path('auth/change-password', views.change_password),
+    path('auth/forgot-password', views.forgot_password),
+    path('auth/forgot-password-confirm', views.forgot_password_confirm),
 
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('users/<str:username>/', views.user_details)
 ]  

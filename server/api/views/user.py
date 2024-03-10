@@ -19,6 +19,8 @@ from ..models.user import UserModel
 from ..serializers import UserSerializer
 
 
+# USER AUTH
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -51,9 +53,9 @@ def signup(request):
 
         user = UserModel.objects.get(email=request.data['email'])
         # print("USER: ", serializer.data)
-        
+
         access_token = str(MyTokenObtainPairSerializer.get_token(user=user))
-        
+
         return Response({'token': access_token, 'user': serializer.data}, status=status.HTTP_201_CREATED)
     except Exception as e:
         print("ERROR - signup: ", e)
@@ -186,3 +188,28 @@ def test(request):
 
 def test_token(request):
     return Response("passed!")
+
+
+# USER CRUD
+@api_view(['GET', 'PATCH', 'DELETE'])
+def user_details(request, username):
+    try:
+        user = UserModel.objects.get(username=username)
+    except UserModel.DoesNotExist:
+        return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
