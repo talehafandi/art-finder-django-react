@@ -28,7 +28,7 @@ class VenueModel(models.Model):
     venue_category = models.CharField(max_length=2, 
             choices=VENUE_CATEGORY_CHOICES,
             blank=True, null=True)
-    hosting_events = models.ForeignKey("EventModel", on_delete=models.CASCADE, related_name="hosts", null=True)
+    hosting_events = models.ManyToManyField("EventModel", related_name="hosts", null=True)
     # image = models.URLField(max_length=MAX_URL_LENGTH)
 
     def __str__(self):

@@ -12,26 +12,39 @@ from ..models import *
 from ..serializers import *
 
 
-# Organiser signup - Venue are added (we might not need separate view for it)
-# But when a user signs up as organiser the venue model must be populated
-# Venue category can be MUSEUM/GALLERY/NULL
-
+# # Organiser signup - Venue are added (we might not need separate view for it)
+# # But when a user signs up as organiser the venue model must be populated
+# # Venue category can be MUSEUM/GALLERY/NULL
+# #
 #
+# CREATE VENUE
+#
+#
+@api_view(['POST'])
+def create_venue(request):
+        # # Check if the user is an organiser
+        # if request.user.role != UserModel.ORGANISER_ROLE:
+        #     return Response({"error": "You do not have permission to perform this action."},
+        #                     status=status.HTTP_403_FORBIDDEN)
+        serializer = VenueSerializer(data=request.data)
+        if serializer.is_valid():
+            # Create the venue
+            venue = serializer.save()
+
+            # Ideally the user (organiser signup page) must have this information
+            venue_data = VenueSerializer(venue).data
+
+            # Send back data to update the page after event addition
+            return Response(venue_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # 
 # CREATE EVENTS
 #
 # Logged in users (only Organisers) adds event
 # Organiser must also sent the venue_id he want to associate with the event
 @api_view(['POST'])
-# @authentication_classes([SessionAuthentication, TokenAuthentication])
-# @permission_classes([IsAuthenticated])
 def create_event(request):
-    print(request.data)
-    if request.method == 'POST':
-        # # Check if the user is an organiser
-        # if request.user.role != UserModel.ORGANISER_ROLE:
-        #     return Response({"error": "You do not have permission to perform this action."},
-        #                     status=status.HTTP_403_FORBIDDEN)
         serializer = EventSerializer(data=request.data)
         if serializer.is_valid():
 
@@ -40,19 +53,77 @@ def create_event(request):
             try:
                 venue = VenueModel.objects.get(id=venue_id)
             except VenueModel.DoesNotExist:
-                 return Response({"error": "Venue not found"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Venue not found"}, status=status.HTTP_404_NOT_FOUND)
 
             # Create the event
             event = serializer.save()
 
             # Update the hosting_events field of the venue
-            venue.hosting_events = event
+            # Venue can hold many events
+            venue.hosting_events.add(event)
             venue.save()
 
             event_data = EventSerializer(event).data
-            # Send back data to update the page after event addition
-            return Response(event_data, status=status.HTTP_201_CREATED)
+            venue_data = VenueSerializer(venue).data
+            # Send back data to update the page after event addition 
+            # Change response as needed
+            return Response({"event": event_data,
+                             "venue": venue_data}, status=status.HTTP_201_CREATED)
+        # If serailizer is not valid return error
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#
+#
+# LIST ALL EVENTS
+#
+@api_view(['GET'])
+def list_events(request):
+    queryset = EventModel.objects.all()
+    serializer = EventSerializer(queryset, many=True)
+    response_data = serializer.data
+
+    # Send back data to update the page after event addition
+    return Response(response_data, status=status.HTTP_201_CREATED)
+
+# 
+#  DELETE AN EVENT
+# 
+@api_view(['DELETE'])
+def delete_event(request):
+        
+    # Request gives the event to be deleted
+    to_delete_event = request.data.get('event_id')
+
+    try:
+        event = EventModel.objects.get(id=to_delete_event)
+    except EventModel.DoesNotExist:
+        return Response({"message": "Event does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    event.delete()
+
+    # Respond back that the event was deleted - Not sure if we have to send data 
+    # back to update view 
+    # response_data = EventSerializer(event).data
+    return Response({"message": "Event deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+# 
+#  UPDATE AN EVENT
+# 
+@api_view(['PUT'])
+def update_event(request):
+
+    # Request gives the event to be updated
+    to_update_event = request.data.get('event_id')
+    try:
+        event = EventModel.objects.get(id=to_update_event)
+    except EventModel.DoesNotExist:
+        return Response({"message": "Event does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = EventSerializer(event, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #
 #  EXPLORE PAGE
@@ -65,18 +136,22 @@ def explore_page(request):
     # Request gives you the category selected, it will be MUSEUM by default
     requested_category = request.data.get('requested_category')
 
-    if(requested_category in [VenueModel.MUSEUM, VenueModel.GALLERY]):
+    if(requested_category in {VenueModel.MUSEUM, VenueModel.GALLERY}):
         queryset = VenueModel.objects.filter(venue_category=requested_category)
-        serializer = VenueSerializer(queryset, many=True)
-    queryset = VenueModel.objects.filter(venue_category=requested_category)
-    serializer = EventSerializer(queryset, many=True)
+        serializer = VenueSerializer(queryset, many=True)   
+    else:
+        queryset = EventModel.objects.filter(event_category=requested_category)
+        serializer = EventSerializer(queryset, many=True)
+    response_data = serializer.data
+    
 
     # <TO DO - WISHLIST ADDITION TO THE RESPONSE>
     # Should we add the wishlist information? 
     # If user is logged in
     # Need to check the user's wishlisted items and that information should also be given
 
-    return Response(serializer.data)
+    # Send back data to update the page after event addition
+    return Response(response_data, status=status.HTTP_201_CREATED)
 
 #
 #
@@ -85,35 +160,30 @@ def explore_page(request):
 #
 # Logged in users (not organiser) can book events
 @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])  # Use appropriate authentication
-# @permission_classes([IsAuthenticated])  # Only authenticated users can access
 def book_event(request):
+     # Get the event for the booking
+    event_id = request.data.get('event_id')
+    try:
+        event = EventModel.objects.get(id=event_id)
+    except EventModel.DoesNotExist:
+        return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    # # Check if the user has permission to book for this event (can add more checks as required)
-    # if request.user.role != UserModel.USER_ROLE:
-    #     return Response({"error": "You do not have permission to perform this action."},
-    #                     status=status.HTTP_403_FORBIDDEN)
+    # Get the user
+    user_id = request.data.get('user_id')
+    try:
+        user = UserModel.objects.get(id=user_id)
+    except UserModel.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    number_of_tickets = request.data.get('number_of_tickets')
 
-    serializer = BookingSerializer(data=request.data)
-    if serializer.is_valid():
-        # Get the user for event booking
-        user_id = request.data.get('user_id')
-        try:
-            user = UserModel.objects.get(id=user_id)
-        except UserModel.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        serializer.validated_data['user'] = user
-        
-        # Get the event for the booking
-        event_id = request.data.get('event_id')
-        try:
-            event = EventModel.objects.get(id=event_id)
-        except EventModel.DoesNotExist:
-            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
-        serializer.validated_data['event'] = event
-        
+    # Serialize the data
+    serializer = BookingSerializer(user=user, event=event, 
+                                   number_of_tickets=number_of_tickets, 
+                                   booking_date=datetime.date.today())
+    if serializer.is_valid():  
         # Update the booking date and save
-        booking = serializer.save(booking_date=datetime.date.today()) # Booking Date
+        booking = serializer.save() # Booking Date
 
         booking_data = BookingSerializer(booking).data
 
@@ -127,15 +197,7 @@ def book_event(request):
 #
 # Logged in users (not organiser) can add only venues to an itinerary associated to his profile
 @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])  # Use appropriate authentication
-# @permission_classes([IsAuthenticated])  # Only authenticated users can access
 def add_venue_to_itinerary(request):
-
-    # # Check if the user has permission to add venue to itinerary
-    # if request.user.role != UserModel.USER_ROLE:
-    #     return Response({"error": "You do not have permission to perform this action."},
-    #                     status=status.HTTP_403_FORBIDDEN)
-
     # Get the venue to add to the itinerary
     venue_id = request.data.get('venue_id')
     itinerary_id = request.data.get('itinerary_id')
@@ -159,15 +221,7 @@ def add_venue_to_itinerary(request):
 #
 # Logged in users(not organiser) can view their plans (itineraries and booked events)
 @api_view(['GET'])
-# @authentication_classes([TokenAuthentication])  # Use appropriate authentication
-# @permission_classes([IsAuthenticated])  # Only authenticated users can access
 def myplan_page(request):
-
-    # # Check if the user has permission to book for this event (can add more checks as required)
-    # if request.user.role != UserModel.USER_ROLE:
-    #     return Response({"error": "You do not have permission to perform this action."},
-    #                     status=status.HTTP_403_FORBIDDEN)
-
     # ID associated with a user will be given in the request
     user_id = request.data.get('user_id')
 
@@ -193,15 +247,7 @@ def myplan_page(request):
 #
 # Logged in users (not organiser) can create itineraries
 @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])  # Use appropriate authentication
-# @permission_classes([IsAuthenticated])  # Only authenticated users can access
 def create_itinerary(request):
-
-    # # Check if the user has permission to create Itinerary
-    # if request.user.role != UserModel.USER_ROLE:
-    #     return Response({"error": "You do not have permission to perform this action."},
-    #                     status=status.HTTP_403_FORBIDDEN)
-
     serializer = ItinerarySerializer(data=request.data)
     if serializer.is_valid():
         # Associate the user with the itinerary
@@ -226,16 +272,7 @@ def create_itinerary(request):
 # their profile, logged in users can also wishlist events and venues
 #
 @api_view(['GET', 'POST'])
-# @authentication_classes([TokenAuthentication])  # Use appropriate authentication
-# @permission_classes([IsAuthenticated])  # Only authenticated users can access
 def wishlist_page(request):
-
-    # # Check if the user has permission to book for this event (can add more checks as required)
-    # if request.user.role != UserModel.USER_ROLE:
-    #     return Response({"error": "You do not have permission to perform this action."},
-    #                     status=status.HTTP_403_FORBIDDEN)
-
-
     # User can wishlist either a event/ venue at a time 
     # Based on how we are getting this POST request some modification
     # is required below
