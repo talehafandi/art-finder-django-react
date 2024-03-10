@@ -18,7 +18,13 @@ class UserViewsTestCase(TestCase):
         self.token = Token.objects.create(user=self.user)
 
     def test_signup(self):
-        request = self.factory.post('/signup', self.user_data)
+        signup_data ={
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "newtest@example.com",
+            "password": "test_password"
+        }
+        request = self.factory.post('/signup', signup_data, format='json')
         response = signup(request)
         self.assertEqual(response.status_code, 201)
         self.assertIn('token', response.data)
@@ -53,10 +59,14 @@ class UserViewsTestCase(TestCase):
         request = self.factory.post('/forgot_password', request_data)
         response = forgot_password(request)
         self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        # The assertion might change based on how forgot_pass_otp is actually implemented
         self.assertTrue(UserModel.objects.get(email=self.user_data['email']).forgot_pass_otp is not None)
 
     def test_forgot_password_confirm(self):
-        otp = "123456"  
+        self.test_forgot_password() 
+        self.user.refresh_from_db()
+        otp = self.user.forgot_pass_otp
         new_password = "new_test_password"
         request_data = {
             "email": self.user_data['email'],
@@ -66,6 +76,7 @@ class UserViewsTestCase(TestCase):
         request = self.factory.post('/forgot_password_confirm', request_data)
         response = forgot_password_confirm(request)
         self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
         self.assertEqual(UserModel.objects.get(email=self.user_data['email']).check_password(new_password), True)
 
     def test_test_token(self):
@@ -75,5 +86,6 @@ class UserViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('message', response.data)
         self.assertEqual(response.data['message'], 'passed!')
+
 
 # Create your tests here.
