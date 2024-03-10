@@ -18,12 +18,17 @@ export const Auth = () => {
   const { authPopupVisibility } = useAppContext();
   const [authView, setAuthView] = useState("signin");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+  };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -38,15 +43,25 @@ export const Auth = () => {
     setLastName(event.target.value);
   };
 
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+    setFirstName("");
+    setLastName("");
+    setUsername("");
+  };
+
   const toggleAuthView = () => {
     if (authView == "signin") setAuthView("signup");
     else setAuthView("signin");
+    resetForm();
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     console.log("email:", email);
     console.log("Password:", password);
-    restApi.signIn(email, password);
+    const response = await restApi.signIn(username, password);
+    console.log("Sign in response: ", response);
     //TODO: Make API call...
   };
 
@@ -132,13 +147,13 @@ export const Auth = () => {
             <div className="sign-in-form">
               <TextField
                 className="text-field-instance"
-                id="email"
-                label="Email"
+                id="username"
+                label="Username"
                 variant="standard"
                 size="medium"
-                value={email}
+                value={username}
                 sx={{ marginBottom: "10%" }}
-                onChange={handleEmailChange}
+                onChange={handleUsernameChange}
               />
               <TextField
                 className="design-component-instance-node"
