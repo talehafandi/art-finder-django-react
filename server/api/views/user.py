@@ -187,7 +187,7 @@ def test(request):
 
 
 def test_token(request):
-    return Response("passed!")
+    return Response({'message': 'passed!'}, status=200)
 
 
 # USER CRUD
