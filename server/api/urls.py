@@ -5,6 +5,9 @@ from .views.user import test
 from .views.user import signup
 from .views.user import login
 from .views.event import *
+from .views.venue import *
+from .views.itinerary import *
+from .views.wishlist import *
 from django.contrib import admin
 from .views.user import change_password
 from .views.user import forgot_password
@@ -15,15 +18,18 @@ app_name = 'api'
 
 # Add the app specific URLs
 urlpatterns = [
-    path('events/create_event', create_event), # CreatEvent
-    path('events/delete_event', delete_event), # DeleteEvent
-    path('events/update_event', update_event), # UpdateEvent
+    path('events/<str:pk>', event_details), # CreatEvent
+    path('events/<str:pk>', event_details), # DeleteEvent
+    path('events/<str:pk>', event_details), # UpdateEvent
     path('events/', list_events), # List all events
-    path('events/book_event', book_event), # BookEvent (Cannot check until we link with a user)
-    path('venues/', explore_page), # This view gives events or venues 
-    path('venues/create_venue', create_venue), # CreateVenue (ideally in organiser signup page)
-    path('wishlist/', wishlist_page),
-    path('wishlist/add/', wishlist_page),
+    path('venues/<str:pk>', venue_details), # CreateVenue (ideally in organiser signup page)
+    path('venues/<str:pk>', venue_details), # DeleteVenue
+    path('venues<str:pk>', venue_details), # UpdateVenue
+    path('venues/', list_venues), # List all venues
+    # path('venues/', explore_page), # This view gives events or venues
+    # path('events/book_event', book_event), # BookEvent (Cannot check until we link with a user)
+    path('wishlist/', list_wishlists),
+    path('wishlist/add/', create_wishlist),
     path('test/', test),
     path('signup/', signup),
     path('login/', login),

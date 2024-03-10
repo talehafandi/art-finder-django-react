@@ -10,9 +10,8 @@ class ItineraryModel(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     user = models.ForeignKey("UserModel", on_delete=models.CASCADE, related_name='itineraries')
-    events = models.ManyToManyField("EventModel", related_name='itineraries')
-    venues = models.ManyToManyField("VenueModel", related_name='itineraries')
-
+    events = models.ManyToManyField("EventModel", related_name='itineraries', null=True)
+    venues = models.ManyToManyField("VenueModel", related_name='itineraries', null=True)
 
     def __str__(self):
         return self.name
