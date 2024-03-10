@@ -23,11 +23,10 @@ class EventModel(models.Model):
     # Event model fields
     title = models.CharField(max_length=MAX_TITLE_LENGTH)
     description = models.CharField(max_length=MAX_DESCRIPTION_LENGTH)
-    venue = models.OneToOneField("VenueModel", on_delete=models.CASCADE, related_name="hosted_in")
     date = models.DateField()
-    startTime = models.TimeField()
-    endTime = models.TimeField()
-    eventCategory = models.CharField(max_length=2, 
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    event_category = models.CharField(max_length=2, 
             choices=EVENT_CATEGORY_CHOICES,
             default=ART)
     fee = models.DecimalField(max_digits=10, decimal_places=2)

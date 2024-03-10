@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import { Outlet } from "react-router-dom";
 
 import { Box } from "@mui/material";
-import { AppBar } from "../../Appbar";
+import AppBar from "../../Appbar";
+import { AppProvider } from "../../../context/appContext";
+import AuthDialog from "../../../pages/Auth";
 
 const BaseLayout = ({ children }) => {
   return (
@@ -12,8 +14,11 @@ const BaseLayout = ({ children }) => {
         height: "100%",
       }}
     >
-      <AppBar></AppBar>
-      {children || <Outlet />}
+      <AppProvider>
+        <AppBar></AppBar>
+        {children || <Outlet />}
+        <AuthDialog />
+      </AppProvider>
     </Box>
   );
 };
