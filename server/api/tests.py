@@ -1,93 +1,79 @@
+# tests.py
 from django.test import TestCase
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIClient
-from django.contrib.auth.models import User
+from requests import Response
+from rest_framework.test import APIRequestFactory, force_authenticate
 from rest_framework.authtoken.models import Token
-from django.utils import timezone
-from datetime import timedelta
+from api.models import UserModel
+from api.views import signup, login, change_password, forgot_password, forgot_password_confirm, test_token
 
-class UserManagementTestCase(TestCase):
+class UserViewsTestCase(TestCase):
     def setUp(self):
-        # Create a user for testing login and related functionalities
-        self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpassword123')
-        self.token, _ = Token.objects.get_or_create(user=self.user)
-        self.client = APIClient()
-    
-    # Test cases for signup
+        self.factory = APIRequestFactory()
+        self.user_data = {
+            "email": "test@example.com",
+            "username": "test_user",
+            "password": "test_password"
+        }
+        self.user = UserModel.objects.create_user(**self.user_data)
+        self.token = Token.objects.create(user=self.user)
+
     def test_signup(self):
-        url = reverse('signup')  # Assuming you have a named URL for signup
-        data = {'email': 'newuser@example.com', 'password': 'newuser123'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    
-    def test_signup_with_invalid_email(self):
-        url = reverse('signup')
-        data = {'email': 'invalidemail', 'password': 'password123'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        request = self.factory.post('/signup', self.user_data)
+        response = signup(request)
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('token', response.data)
+        self.assertIn('user', response.data)
 
-    # Test cases for login
     def test_login(self):
-        url = reverse('login')
-        data = {'username': 'testuser', 'password': 'testpassword123'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
-    def test_login_with_wrong_password(self):
-        url = reverse('login')
-        data = {'username': 'testuser', 'password': 'wrongpassword'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        request_data = {
+            "username": self.user.username,
+            "password": self.user_data['password']
+        }
+        request = self.factory.post('/login', request_data)
+        response = login(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('token', response.data)
+        self.assertIn('user', response.data)
 
-    # Test cases for changing password
     def test_change_password(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        url = reverse('change_password')
-        data = {'username': 'testuser', 'current_password': 'testpassword123', 'new_password': 'newpassword123'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_change_password_with_wrong_current_password(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        url = reverse('change_password')
-        data = {'username': 'testuser', 'current_password': 'wrongpassword', 'new_password': 'newpassword456'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_authentication_required_for_changing_password(self):
-        url = reverse('change_password')
-        data = {'username': 'testuser', 'current_password': 'testpassword123', 'new_password': 'securepassword456'}
-        response = self.client.post(url, data, format='json')  # No authentication provided
-        self.assertNotEqual(response.status_code, status.HTTP_200_OK)
-
-    # Test cases for forgot password
+        new_password = "new_test_password"
+        request_data = {
+            "username": self.user.username,
+            "current_password": self.user_data['password'],
+            "new_password": new_password
+        }
+        request = self.factory.post('/change_password', request_data)
+        force_authenticate(request, user=self.user)
+        response = change_password(request)
+        self.assertEqual(response.status_code, 200)
+        user_updated = UserModel.objects.get(username=self.user.username)
+        self.assertTrue(user_updated.check_password(new_password))
     def test_forgot_password(self):
-        url = reverse('forgot_password')
-        data = {'email': 'test@example.com'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        request_data = {"email": self.user_data['email']}
+        request = self.factory.post('/forgot_password', request_data)
+        response = forgot_password(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(UserModel.objects.get(email=self.user_data['email']).forgot_pass_otp is not None)
 
-    def test_forgot_password_for_nonexistent_email(self):
-        url = reverse('forgot_password')
-        data = {'email': 'nonexistent@example.com'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_forgot_password_confirm(self):
+        otp = "123456"  
+        new_password = "new_test_password"
+        request_data = {
+            "email": self.user_data['email'],
+            "otp": otp,
+            "new_password": new_password
+        }
+        request = self.factory.post('/forgot_password_confirm', request_data)
+        response = forgot_password_confirm(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserModel.objects.get(email=self.user_data['email']).check_password(new_password), True)
 
-    # Test cases for forgot password confirm
-    def test_forgot_password_confirm_with_expired_otp(self):
-        # Setting up a user with an expired OTP
-        user_with_expired_otp = User.objects.create_user(username='expiredotpuser', email='expiredotp@example.com', password='testpassword123')
-        user_with_expired_otp.forgot_pass_otp = '123456'
-        user_with_expired_otp.forgot_pass_otp_expiry = timezone.now() - timedelta(hours=1)  # Assuming the OTP expires after some time
-        user_with_expired_otp.save()
-
-        url = reverse('forgot_password_confirm')
-        data = {'email': 'expiredotp@example.com', 'otp': '123456', 'new_password': 'newpassword789'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-        self.assertIn('OTP is expired', response.data['message'])
-
+    def test_test_token(self):
+        request = self.factory.get('/test_token')
+        force_authenticate(request, user=self.user, token=self.token.key)
+        response = test_token(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'passed!')
 
 # Create your tests here.

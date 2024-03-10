@@ -155,5 +155,5 @@ def test(request):
 # @authentication_classes([SessionAuthentication, TokenAuthentication])
 # @permission_classes([IsAuthenticated])
 def test_token(request):
-    return Response("passed!")
+    return Response({'message': 'passed!'}, status=200)
 
