@@ -12,13 +12,42 @@ import {
 import { useAppContext } from "../../context/appContext";
 import { Checkbox } from "@mui/material";
 
+import restApi from "../../api";
+
 export const Auth = () => {
   const { authPopupVisibility } = useAppContext();
   const [authView, setAuthView] = useState("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
 
   const toggleAuthView = () => {
     if (authView == "signin") setAuthView("signup");
     else setAuthView("signin");
+  };
+
+  const handleSignIn = () => {
+    console.log("email:", email);
+    console.log("Password:", password);
+    restApi.signIn(email, password);
+    //TODO: Make API call...
   };
 
   return (
@@ -107,17 +136,20 @@ export const Auth = () => {
                 label="Email"
                 variant="standard"
                 size="medium"
-                value="spiralmonkey@gmail.com"
+                value={email}
                 sx={{ marginBottom: "10%" }}
+                onChange={handleEmailChange}
               />
               <TextField
                 className="design-component-instance-node"
                 label="Password"
                 id="password"
+                type="password"
                 size="medium"
-                value="****************"
+                value={password}
                 variant="standard"
                 sx={{ marginBottom: "10%" }}
+                onChange={handlePasswordChange}
               />
             </div>
           )}
@@ -132,7 +164,8 @@ export const Auth = () => {
                   size="medium"
                   sx={{ marginBottom: "10%" }}
                   fullWidth
-                  value="Mahesh"
+                  value={firstName}
+                  onChange={handleFirstNameChange}
                 />
                 <TextField
                   className="text-field-instance"
@@ -142,7 +175,8 @@ export const Auth = () => {
                   size="medium"
                   sx={{ marginBottom: "10%" }}
                   fullWidth
-                  value="Adhikari"
+                  value={lastName}
+                  onChange={handleLastNameChange}
                 />
               </div>
               <TextField
@@ -151,17 +185,20 @@ export const Auth = () => {
                 label="Email"
                 variant="standard"
                 size="medium"
-                value="spiralmonkey@gmail.com"
+                value={email}
                 sx={{ marginBottom: "10%" }}
+                onChange={handleEmailChange}
               />
               <TextField
                 className="design-component-instance-node"
                 label="Password"
                 id="password"
                 size="medium"
-                value="****************"
+                value={password}
+                type="password"
                 variant="standard"
                 sx={{ marginBottom: "10%" }}
+                onChange={handlePasswordChange}
               />
               <div className="tac-check">
                 <Checkbox size="small" />
@@ -183,7 +220,11 @@ export const Auth = () => {
 
         <div className="auth-options">
           {authView == "signin" && (
-            <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
+            <PrimaryButton
+              fullWidth
+              sx={{ marginBottom: "5%" }}
+              onClick={handleSignIn}
+            >
               SIGN IN
             </PrimaryButton>
           )}
