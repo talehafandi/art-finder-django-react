@@ -8,9 +8,9 @@ app_name = 'api'
 
 # Add the app specific URLs
 urlpatterns = [
-    path('test/', views.test),
-    path('auth/signup/', views.signup),
-    path('auth/login/', views.login),
+    path('test', views.test),
+    path('auth/signup', views.signup),
+    path('auth/login', views.login),
     path('auth/change-password', views.change_password),
     path('auth/forgot-password', views.forgot_password),
     path('auth/forgot-password-confirm', views.forgot_password_confirm),
