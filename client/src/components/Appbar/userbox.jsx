@@ -9,8 +9,28 @@ import {
   getIsUserSignedIn,
 } from "../../redux/reducers/userSlice";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
+import { useDispatch } from "react-redux"; // Import useDispatch
+import { updateSignedInUser } from "../../redux/reducers/userSlice";
+import { Button } from "@mui/material";
 
 const Userbox = () => {
+  const dispatch = useDispatch();
+  const handleSignOut = () => {
+    console.log("Signing out user...");
+    dispatch(
+      updateSignedInUser({
+        user: {
+          first_name: "",
+          last_name: "",
+          username: "",
+          email: "",
+          avatar_url: "",
+        },
+        token: "",
+      })
+    );
+  };
+
   const { authPopupVisibility } = useAppContext();
   const currentUser = useSelector(getCurrentUser);
   const isUserSignedIn = useSelector(getIsUserSignedIn);
@@ -31,6 +51,7 @@ const Userbox = () => {
           type="button"
           onMouseDown={onRippleStart}
           onMouseUp={onRippleStop}
+          onClick={handleSignOut}
         >
           <img
             src={currentUser.avatar}
@@ -51,6 +72,9 @@ const Userbox = () => {
             className="userbox-expanddown"
           />
           <TouchRipple ref={rippleRef} center={false} />
+          {/* <div className="profile-drop-down" onClick={handleSignOut}>
+            <Button sx={{ background: "white" }}>Sign Out</Button>
+          </div> */}
         </div>
       )}
       {!isUserSignedIn && (

@@ -99,10 +99,19 @@ export const Auth = () => {
     console.log("Signing up...");
     setSigning(true);
     await restApi
-      .signIn(username, password)
+      .signUp(firstName, lastName, email, password)
       .then((response) => {
-        console.log("Sign in response: ", response);
+        console.log("Sign up response: ", response);
         setSigning(false);
+        if (
+          response.status == 200 &&
+          response.data.token != "" &&
+          response.data.token != null &&
+          response.data.token != undefined
+        ) {
+          console.log("Signed up successfully!");
+          //TODO: Display a message that an account had been created and promp the user to sign in with the username and password
+        }
       })
       .catch((error) => {
         setSigning(false);
@@ -294,6 +303,7 @@ export const Auth = () => {
               sx={{ marginBottom: "5%" }}
               loading={signing}
               loadingIndicator="Signing up…"
+              onClick={handleSignUp}
             >
               SIGN UP
             </LoadingButtonStyled>

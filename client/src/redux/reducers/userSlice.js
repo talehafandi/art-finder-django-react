@@ -27,6 +27,7 @@ export const userSlice = createSlice({
         username != ""
       )
         state.isUserSignedIn = true;
+      else state.isUserSignedIn = false;
     },
     remove: (state) => (state = {}),
   },

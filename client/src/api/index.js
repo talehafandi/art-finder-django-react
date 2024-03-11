@@ -26,6 +26,13 @@ export const makeApiCall = async (endpoint, method, data) => {
 const restApi = {
   signIn: (username, password) =>
     makeApiCall("auth/login", "POST", { username, password }),
+  signUp: (firstName, lastName, email, password) =>
+    makeApiCall("auth/signup", "POST", {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      password,
+    }),
   getDataOnExplore: () => makeApiCall("/", "GET", null, null), //! Change the order of arguments and pass null for parameters not used
   getDataOnWishlist: () => makeApiCall("/", "GET", null, null),
 };

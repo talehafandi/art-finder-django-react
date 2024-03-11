@@ -4,7 +4,6 @@ import { Typography } from "@mui/joy";
 import { NavLink } from "react-router-dom";
 import Userbox from "./userbox";
 import Button from "@mui/material/Button";
-// import { useAppContext } from "../../context/appContext";
 
 const AppBar = () => {
   return (
