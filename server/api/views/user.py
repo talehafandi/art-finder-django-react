@@ -126,7 +126,7 @@ def forgot_password(request):
         email_sender = settings.EMAIL_HOST_USER
         # email_receiver = user_email
         send_mail(email_title, email_text, email_sender, [
-                  user_email, 'artfinder.dev@gmail.com'], fail_silently=False)
+                  user_email, 'angulardev789@gmail.com'], fail_silently=False)
 
         return Response({"message": "Confirmation code is sent to your email"})
 
@@ -187,7 +187,7 @@ def test(request):
 
 
 def test_token(request):
-    return Response("passed!")
+    return Response({'message': 'passed!'}, status=200)
 
 
 # USER CRUD
