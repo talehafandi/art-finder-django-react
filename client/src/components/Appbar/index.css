@@ -8,6 +8,8 @@
   justify-content: space-between;
   padding: 5px 30px;
   align-items: center;
+  transition: top 0.3s;
+  z-index: 20;
   .menu-wrapper {
     display: flex;
     justify-content: center;
@@ -37,4 +39,10 @@
       }
     }
   }
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }

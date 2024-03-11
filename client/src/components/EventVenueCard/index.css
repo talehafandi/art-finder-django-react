@@ -130,26 +130,29 @@
   flex-shrink: 0;
   margin-bottom: 5px;
   .keyword-wrapper {
-    gap: 10px;
-    width: 64px;
     display: flex;
-    padding: 4px 16px;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: 50px;
-    justify-content: center;
-    background-color: rgba(208, 188, 250, 1);
-    .keyword-text {
-      color: rgba(63, 63, 63, 1);
-      height: auto;
-      font-size: 11px;
-      font-style: Regular;
-      text-align: center;
-      font-family: Montserrat;
-      font-weight: 400;
-      line-height: normal;
-      font-stretch: normal;
-      text-decoration: none;
+    flex-wrap: wrap;
+    gap: 10px;
+    .keyword {
+      display: flex;
+      padding: 4px 16px;
+      align-items: center;
+      flex-shrink: 0;
+      border-radius: 50px;
+      justify-content: center;
+      background-color: rgba(208, 188, 250, 1);
+      .keyword-text {
+        color: rgba(63, 63, 63, 1);
+        height: auto;
+        font-size: 11px;
+        font-style: Regular;
+        text-align: center;
+        font-family: Montserrat;
+        font-weight: 400;
+        line-height: normal;
+        font-stretch: normal;
+        text-decoration: none;
+      }
     }
   }
 
