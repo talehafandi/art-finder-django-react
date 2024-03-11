@@ -1,13 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-// export const updateUser = createAsyncThunk("users/update", async (user) => {
-//   const res = await axios.post(
-//     "http://localhost:8800/api/users/1/update", //TODO: update actual API url
-//     user
-//   );
-//   return res.data;
-// });
+import { createSlice } from "@reduxjs/toolkit";
 
 export const userSlice = createSlice({
   name: "user",
@@ -15,6 +6,7 @@ export const userSlice = createSlice({
     firstName: "",
     lastName: "",
     email: "",
+    username: "",
     avatar: "",
     token: "",
     isUserSignedIn: false,
@@ -55,8 +47,9 @@ export const userSlice = createSlice({
   selectors: {
     getCurrentUser: (state) => {
       return {
-        name: state.name,
+        name: state.firstName + "" + state.lastName,
         email: state.email,
+        avatar: state.avatar,
       };
     },
     getIsUserSignedIn: (state) => state.isUserSignedIn,

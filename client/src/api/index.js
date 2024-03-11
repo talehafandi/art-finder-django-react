@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useDispatch } from "react-redux"; // Import useDispatch
 import { updateSignedInUser } from "../redux/reducers/userSlice";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -17,7 +16,7 @@ export const makeApiCall = async (endpoint, method, data) => {
       data,
     });
 
-    return response.data; // Return the API response
+    return { data: response.data, status: response.status }; // Return the API response
   } catch (error) {
     console.error("Error making API call:", error);
     // TODO: Handle error (e.g., show a notification, dispatch an error action, etc.)

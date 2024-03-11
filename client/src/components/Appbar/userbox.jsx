@@ -1,10 +1,8 @@
 import React from "react";
 import "./userbox.css";
-import avatar from "../../assets/avatar.png";
 import expandDown from "../../assets/expand_down.svg";
 import { useAppContext } from "../../context/appContext";
 import { PrimaryButton } from "../Buttons";
-import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import {
   getCurrentUser,
@@ -16,8 +14,6 @@ const Userbox = () => {
   const { authPopupVisibility } = useAppContext();
   const currentUser = useSelector(getCurrentUser);
   const isUserSignedIn = useSelector(getIsUserSignedIn);
-  // console.log("Current user: ", currentUser);
-  // console.log("is user signed in: ", isUserSignedIn);
 
   const rippleRef = React.useRef(null);
   const onRippleStart = (e) => {
@@ -37,9 +33,9 @@ const Userbox = () => {
           onMouseUp={onRippleStop}
         >
           <img
-            src={avatar}
+            src={currentUser.avatar}
             alt="profile-picture"
-            className="userbox-ellipse2"
+            className="profile-picture"
           />
           <div className="userbox-group3">
             <span className="userbox-text">

@@ -4,17 +4,31 @@ import Typography from "@mui/material/Typography";
 import "./index.css";
 import googleIcon from "../../assets/google-icon.png";
 import signInBg from "../../assets/sign-in-bg.png";
-import {
-  PrimaryAltButton,
-  PrimaryButton,
-  SecondaryOutlinedButton,
-} from "../Buttons";
+import { PrimaryAltButton, SecondaryOutlinedButton } from "../Buttons";
 import { useAppContext } from "../../context/appContext";
 import { Checkbox } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { styled } from "@mui/material/styles";
+import { updateSignedInUser } from "../../redux/reducers/userSlice";
 
 import restApi from "../../api";
+import { useDispatch } from "react-redux"; // Import useDispatch
+
+export const LoadingButtonStyled = styled(LoadingButton)(
+  ({ theme }) => `
+       background: ${theme.palette.primary.main};
+       color: ${theme.palette.common.white};
+       height: 44px !important;
+       &:hover {
+          background: ${theme.palette.primary.dark};
+       }
+       white-space: nowrap;
+      `
+);
 
 export const Auth = () => {
+  const dispatch = useDispatch();
+
   const { authPopupVisibility } = useAppContext();
   const [authView, setAuthView] = useState("signin");
   const [email, setEmail] = useState("");
@@ -22,6 +36,7 @@ export const Auth = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [signing, setSigning] = useState(false);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -58,13 +73,41 @@ export const Auth = () => {
   };
 
   const handleSignIn = async () => {
-    console.log("email:", email);
-    console.log("Password:", password);
-    const response = await restApi.signIn(username, password);
-    console.log("Sign in response: ", response);
-    //TODO: Make API call...
+    console.log("Signing in...");
+    setSigning(true);
+    await restApi
+      .signIn(username, password)
+      .then((response) => {
+        console.log("Sign in response: ", response);
+        setSigning(false);
+        if (
+          response.status == 200 &&
+          response.data.token != "" &&
+          response.data.token != null &&
+          response.data.token != undefined
+        ) {
+          dispatch(updateSignedInUser(response.data));
+          authPopupVisibility(false);
+        }
+      })
+      .catch((error) => {
+        setSigning(false);
+      });
   };
 
+  const handleSignUp = async () => {
+    console.log("Signing up...");
+    setSigning(true);
+    await restApi
+      .signIn(username, password)
+      .then((response) => {
+        console.log("Sign in response: ", response);
+        setSigning(false);
+      })
+      .catch((error) => {
+        setSigning(false);
+      });
+  };
   return (
     <div className="sign-in-wrapper">
       <div className="left-side">
@@ -235,18 +278,25 @@ export const Auth = () => {
 
         <div className="auth-options">
           {authView == "signin" && (
-            <PrimaryButton
+            <LoadingButtonStyled
               fullWidth
               sx={{ marginBottom: "5%" }}
               onClick={handleSignIn}
+              loading={signing}
+              loadingIndicator="Signing in…"
             >
-              SIGN IN
-            </PrimaryButton>
+              Sign In
+            </LoadingButtonStyled>
           )}
           {authView == "signup" && (
-            <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
+            <LoadingButtonStyled
+              fullWidth
+              sx={{ marginBottom: "5%" }}
+              loading={signing}
+              loadingIndicator="Signing up…"
+            >
               SIGN UP
-            </PrimaryButton>
+            </LoadingButtonStyled>
           )}
           <div className="text-wrapper">Or</div>
 
