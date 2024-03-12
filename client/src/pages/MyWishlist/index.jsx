@@ -5,6 +5,10 @@ import WishlistCard from "../../components/WishlistCard";
 import NearbyVenuesEventsCard from "../../components/NearbyVenuesEventsCard";
 
 const MyWishlist = (props) => {
+  const wishlist = [{}, {}, {}, {}];
+  const renderWishlist = () => {
+    return wishlist.map((item) => <WishlistCard />);
+  };
   return (
     <div className="wishlist-container">
       <div className="wishlist-wrapper">
@@ -38,12 +42,7 @@ const MyWishlist = (props) => {
             </div>
           </div>
         </div>
-        <div className="my-wishlist">
-          <WishlistCard />
-          <WishlistCard />
-          <WishlistCard />
-          <WishlistCard />
-        </div>
+        <div className="my-wishlist">{renderWishlist()}</div>
       </div>
       <div className="places-events-nearby-wrapper">
         <span className="places-events-nearby-heading">

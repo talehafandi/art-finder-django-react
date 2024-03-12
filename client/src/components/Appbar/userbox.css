@@ -20,6 +20,12 @@
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+
+  .profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+  }
 }
 
 .userbox-userbox {
@@ -28,10 +34,7 @@
   display: flex;
   align-items: center;
 }
-.userbox-ellipse2 {
-  width: 40px;
-  height: 40px;
-}
+
 .userbox-group3 {
   width: 200px;
   height: 34px;

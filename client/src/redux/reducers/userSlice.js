@@ -1,53 +1,62 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-export const updateUser = createAsyncThunk("users/update", async (user) => {
-  const res = await axios.post(
-    "http://localhost:8800/api/users/1/update", //TODO: update actual API url
-    user
-  );
-  return res.data;
-});
+import { createSlice } from "@reduxjs/toolkit";
 
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    name: "Mahesh Adhikari",
-    email: "spiralmonkey225@gmail.com",
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+    avatar: "",
+    token: "",
     isUserSignedIn: false,
   },
   reducers: {
-    update: (state, action) => {
-      state.name = action.payload.name;
-      state.email = action.payload.name;
+    updateSignedInUser: (state, action) => {
+      state.firstName = action.payload.user.first_name;
+      state.lastName = action.payload.user.last_name;
+      state.username = action.payload.user.username;
+      state.email = action.payload.user.email;
+      state.avatar = action.payload.user.avatar_url;
+      state.token = action.payload.token;
+
+      if (
+        action.payload.token != "" &&
+        action.payload.token != null &&
+        action.payload.token != undefined &&
+        username != ""
+      )
+        state.isUserSignedIn = true;
+      else state.isUserSignedIn = false;
     },
     remove: (state) => (state = {}),
   },
-  extraReducers: (builder) => {
-    builder.addCase(updateUser.pending, (state, action) => {
-      state.pending = true;
-      state.error = false;
-    }),
-      builder.addCase(updateUser.fulfilled, (state, action) => {
-        state.pending = true;
-        state.userInfo = action.payload;
-      }),
-      builder.addCase(updateUser.rejected, (state, action) => {
-        state.pending = false;
-        state.error = true;
-      });
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(updateUser.pending, (state, action) => {
+  //     state.pending = true;
+  //     state.error = false;
+  //   }),
+  //     builder.addCase(updateUser.fulfilled, (state, action) => {
+  //       state.pending = true;
+  //       state.userInfo = action.payload;
+  //     }),
+  //     builder.addCase(updateUser.rejected, (state, action) => {
+  //       state.pending = false;
+  //       state.error = true;
+  //     });
+  // },
   selectors: {
     getCurrentUser: (state) => {
       return {
-        name: state.name,
+        name: state.firstName + "" + state.lastName,
         email: state.email,
+        avatar: state.avatar,
       };
     },
     getIsUserSignedIn: (state) => state.isUserSignedIn,
   },
 });
 
-export const { update, remove } = userSlice.actions;
+export const { updateSignedInUser, remove } = userSlice.actions;
 export const { getCurrentUser, getIsUserSignedIn } = userSlice.selectors;
 export default userSlice.reducer;
