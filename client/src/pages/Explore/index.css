@@ -107,6 +107,7 @@
   padding: 10px 20px 20px 0;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
 }
 
 .map-ui {

@@ -60,17 +60,7 @@ const EventVenueCard = ({ cardDetails }) => {
       </div>
       <span className="event-venue-description">{cardDetails.description}</span>
       <div className="keyword-book-view-on-map">
-        <div className="keyword-wrapper">
-          {cardDetails.keywords.map((keyword) => (
-            <>
-              <div className="keyword">
-                <span className="keyword-text">
-                  <span>{keyword}</span>
-                </span>
-              </div>
-            </>
-          ))}
-        </div>
+ 
 
         <div className="bookseatviewonmap">
           {/* Todo: Replace the button below with a MUI button */}

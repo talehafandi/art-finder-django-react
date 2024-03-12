@@ -30,7 +30,7 @@ const Explore = (props) => {
   } = useMapContext();
 
   const [loading, setLoading] = useState(false);
-  const exploreData = useSelector(getExploreData);
+  const exploreData = useSelector(getExploreData).data;
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get("cat");
   const dispatch = useDispatch();
@@ -66,7 +66,7 @@ const Explore = (props) => {
     };
 
     fetchData();
-  }, []);
+  }, [searchParam]);
 
   const list = [
     {
@@ -101,7 +101,7 @@ const Explore = (props) => {
     },
   ];
   const renderList = () => {
-    return list.map((item) => <EventVenueCard cardDetails={item} />);
+    return exploreData.map((item) => <EventVenueCard cardDetails={item} />);
   };
 
   const handleExploreData = (cat) => {

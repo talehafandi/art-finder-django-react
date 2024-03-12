@@ -36,6 +36,7 @@ const restApi = {
   listDataOnExplore: () => makeApiCall("explore", "GET", null, null),
   getDataOnExplore: (cat='MU') => makeApiCall(`explore/${cat}`, "GET", null, null), //! Change the order of arguments and pass null for parameters not used
   getDataOnWishlist: () => makeApiCall("whislist", "GET", null, null),
+  searchByName: (query) => makeApiCall(`explore/search/?query=${query}`, "GET", null, null)
 };
 
 export default restApi;

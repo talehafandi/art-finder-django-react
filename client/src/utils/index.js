@@ -15,7 +15,7 @@ export function formatDate(isoDate) {
   ];
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const date = new Date(isoDate);
+  const date = isoDate ? new Date(isoDate) : new Date();
   const dayOfWeek = days[date.getDay()];
   const dayOfMonth = date.getDate();
   const month = months[date.getMonth()];
