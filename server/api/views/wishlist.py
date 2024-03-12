@@ -5,29 +5,37 @@ from django.shortcuts import get_object_or_404
 from ..models import WishlistModel, UserModel
 from ..serializers import WishlistSerializer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
 
 # CREATE WISHLIST
 @permission_classes([IsAuthenticated])
-@api_view(['POST'])
-def create_wishlist(request):
-    # Get associated user
-    try:
-       current_user = UserModel.objects.get(username=request.data['username'])
-    except UserModel.DoesNotExist:
-        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+@api_view(['GET','POST'])
+def wishlist_create_and_list(request):
+    if (request.method == 'POST'):
+        # Get associated user
+        try:
+            current_user = UserModel.objects.get(username=request.data['username'])
+        except UserModel.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    request.data['user'] = current_user.id
-    serializer = WishlistSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        request.data['user'] = current_user.id
+
+        # Serialize data
+        serializer = WishlistSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        wishlists = WishlistModel.objects.all()
+        serializer = WishlistSerializer(wishlists, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 # WISHLIST VIEWS
 @permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
 def wishlist_details(request, pk):
+    # If request gives username, can also filter wishlists of the respective user
+    # in the response <NOT DONE>
     try:
         wishlist = WishlistModel.objects.get(id=pk)
     except WishlistModel.DoesNotExist:
@@ -47,13 +55,26 @@ def wishlist_details(request, pk):
     
     elif request.method == "DELETE":
         wishlist.delete()
+        serializer = WishlistSerializer(wishlist)
         return Response({"message": "Wishlist deleted", 
                              "deleted_wishlist": serializer.data}, status=status.HTTP_204_NO_CONTENT)
 
-# LIST ALL WISHLISTS
+#
+#
+# MYWISHLIST PAGE <NOT SURE IF THIS IS NEEDED)
+#
+# Logged in users(not organiser) can view their wishlisted venues and events
 @permission_classes([IsAuthenticated])
 @api_view(['GET'])
-def list_wishlists(request):
-    wishlists = WishlistModel.objects.all()
+def mywishlist_page(request):
+    # Get associated user
+    try:
+        current_user = UserModel.objects.get(username=request.data['username'])
+    except UserModel.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Retrieve events booked by the user
+    wishlists = WishlistModel.object.filter(user=current_user.id)
     serializer = WishlistSerializer(wishlists, many=True)
+
     return Response(serializer.data, status=status.HTTP_200_OK)
