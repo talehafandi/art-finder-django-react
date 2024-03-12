@@ -12,8 +12,8 @@ app_name = 'api'
 # Add the app specific URLs
 urlpatterns = [
     path('test/', test),
-    path('signup', signup),
-    path('login', login),
+    path('auth/signup', signup),
+    path('auth/login', login),
     path('auth/change-password', change_password),
     path('auth/forgot-password', forgot_password),
     path('auth/forgot-password-confirm', forgot_password_confirm),
@@ -30,6 +30,7 @@ urlpatterns = [
 
     # EXPLORE
     path('explore/<str:category>', explore_page), # This view gives events or venues
+    path('explore', explore_list),
     
     # WIHSLIST
     path('wishlist', list_wishlists),

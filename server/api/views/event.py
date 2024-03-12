@@ -160,6 +160,23 @@ def explore_page(request, category):
     # Send back data to update the page after event addition
     return Response(response_data, status=status.HTTP_201_CREATED)
 
+@api_view(['GET'])
+def explore_list(request):
+    venues = VenueModel.objects.all()
+    venue_serializer = VenueSerializer(venues, many=True)
+
+    events = EventModel.objects.all()
+    event_serializer = EventSerializer(events, many=True)
+
+    response_data = venue_serializer.data + event_serializer.data
+    # <TO DO - WISHLIST ADDITION TO THE RESPONSE>
+    # Should we add the wishlist information?
+    # If user is logged in
+    # Need to check the user's wishlisted items and that information should also be given
+
+    # Send back data to update the page after event addition
+    return Response(response_data, status=status.HTTP_201_CREATED)
+
 #
 #
 # MYPLAN PAGE

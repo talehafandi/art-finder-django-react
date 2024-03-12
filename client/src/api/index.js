@@ -33,8 +33,9 @@ const restApi = {
       email,
       password,
     }),
-  getDataOnExplore: () => makeApiCall("/", "GET", null, null), //! Change the order of arguments and pass null for parameters not used
-  getDataOnWishlist: () => makeApiCall("/", "GET", null, null),
+  listDataOnExplore: () => makeApiCall("explore", "GET", null, null),
+  getDataOnExplore: (cat='MU') => makeApiCall(`explore/${cat}`, "GET", null, null), //! Change the order of arguments and pass null for parameters not used
+  getDataOnWishlist: () => makeApiCall("whislist", "GET", null, null),
 };
 
 export default restApi;

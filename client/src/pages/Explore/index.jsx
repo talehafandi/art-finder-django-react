@@ -10,8 +10,8 @@ import EventVenueCard from "../../components/EventVenueCard";
 import MapUi from "../../components/Map";
 import SculptureIcon from "../../components/Icons/SculptureIcon";
 import restApi from "../../api";
-import { useDispatch } from "react-redux";
-import { updateExploreData } from "../../redux/reducers/exploreSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getExploreData, updateExploreData } from "../../redux/reducers/exploreSlice";
 import { useMapContext } from "../../context/mapContext";
 
 const Explore = (props) => {
@@ -34,7 +34,7 @@ const Explore = (props) => {
       setLoading(true);
       //Make call
       await restApi
-        .getDataOnExplore()
+        .listDataOnExplore()
         .then((response) => {
           //Update state on store (See exploreSlice reducer for more insights)
           dispatch(updateExploreData(response));
@@ -97,7 +97,7 @@ const Explore = (props) => {
             </div>
           </div>
           <div className="explorecategoriesmenu">
-            <div className="category-menu" alt="museum">
+            <div className="category-menu" alt="museum" id='MU' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
               <div className="category-icon">
                 <AccountBalanceIcon fontSize="large" />
               </div>
@@ -105,7 +105,7 @@ const Explore = (props) => {
                 <span>Museums</span>
               </span>
             </div>
-            <div className="category-menu" alt="galleries">
+            <div className="category-menu" alt="galleries" id='GA' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
               <div className="category-icon">
                 <CollectionsIcon fontSize="large" />
               </div>
@@ -113,7 +113,7 @@ const Explore = (props) => {
                 <span>Galleries</span>
               </span>
             </div>
-            <div className="category-menu" alt="photography">
+            <div className="category-menu" alt="photography" id='PH' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
               <div className="category-icon">
                 <PhotoCameraIcon fontSize="large" />
               </div>
@@ -121,7 +121,7 @@ const Explore = (props) => {
                 <span>Photography</span>
               </span>
             </div>
-            <div className="category-menu" alt="sculptures">
+            <div className="category-menu" alt="sculptures" id='SU' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
               <div className="category-icon">
                 <SculptureIcon sx={{ fontSize: 40 }} />
               </div>
@@ -129,7 +129,7 @@ const Explore = (props) => {
                 <span>Sculptures</span>
               </span>
             </div>
-            <div className="category-menu" alt="crafts">
+            <div className="category-menu" alt="crafts" id='CR' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
               <div className="category-icon">
                 <ContentCutIcon fontSize="large" />
               </div>
