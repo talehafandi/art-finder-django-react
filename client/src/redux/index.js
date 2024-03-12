@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userReducer from "./reducers/userSlice";
+import exploreReducer from "./reducers/exploreSlice";
 import cookieMiddleware from "./helper/cookieMiddleware";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -13,6 +14,7 @@ const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     user: userReducer,
+    explore: exploreReducer,
   })
 );
 
