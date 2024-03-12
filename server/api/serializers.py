@@ -17,7 +17,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = EventModel
 
         # to add image field
-        fields = ['title', 'description','date', 'start_time', 'end_time', 'event_category', 'fee']
+        fields = ['title', 'description','date', 'venue', 'start_time', 'end_time', 'event_category', 'fee', 'lat', 'long']
 
 class ItinerarySerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,7 +32,7 @@ class VenueSerializer(serializers.ModelSerializer):
         model = VenueModel
         # to add image field
         fields = ['name', 'description', 'address', 'open_time', 'close_time', 
-                  'contact_email', 'contact_phone_number', 'venue_category', 'hosting_events']
+                  'contact_email', 'contact_phone_number', 'venue_category', 'hosting_events', 'lat', 'long']
         # exclude = ['hosting_events']
 
 class WishlistSerializer(serializers.ModelSerializer):

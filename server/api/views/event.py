@@ -12,7 +12,7 @@ from ..models import *
 from ..serializers import *
 
 
-# 
+#
 # EVENT VIEWS
 #
 # To update, delete and get specific event
@@ -22,7 +22,7 @@ def event_details(request, pk):
         event = EventModel.objects.get(id=pk)
     except EventModel.DoesNotExist:
         return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+
     if (request.method == "GET"):
         serializer = EventSerializer(event, many=True)
         response_data = serializer.data
@@ -34,73 +34,76 @@ def event_details(request, pk):
         if serializer.is_valid():
             # Save
             serializer.save()
-            return Response({"message": "Event updated", 
+            return Response({"message": "Event updated",
                              "updated_event": serializer.data}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         # Delete event
         event.delete()
         serializer = EventSerializer(event)
-        return Response({"message": "Event deleted", 
-                             "deleted_event": serializer.data}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Event deleted",
+                         "deleted_event": serializer.data}, status=status.HTTP_204_NO_CONTENT)
 
 
-# 
+#
 # CREATE EVENTS
 #
 # Logged in users (only Organisers) adds event
 # Organiser must also sent the venue_id he want to associate with the event
-@api_view(['POST'])
-def create_event(request):
-    serializer = EventSerializer(data=request.data)
-    if serializer.is_valid():
+@api_view(['GET', 'POST'])
+def event_create_and_list(request):
 
-        # Get the venue for the event as it is the organiser's venue
-        venue_id = request.data.get('venue_id')
-        try:
-            venue = VenueModel.objects.get(id=venue_id)
-        except VenueModel.DoesNotExist:
-            return Response({"error": "Venue not found"}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        queryset = EventModel.objects.all()
+        serializer = EventSerializer(queryset, many=True)
+        response_data = serializer.data
 
-        # Create the event
-        event = serializer.save()
+        # Send back data to update the page after event addition
+        return Response(response_data, status=status.HTTP_201_CREATED)
+    elif request.method == 'POST':
+        request_data = request.data
 
-        # Update the hosting_events field of the venue
-        # Venue can hold many events
-        venue.hosting_events.add(event)
-        venue.save()
+        # validate value_id
+        try: venue_id = int(request.data.get('venue_id'))
+        except: return Response({"error": "venue_id must be number"}, status=status.HTTP_400_BAD_REQUEST)
 
-        event_data = EventSerializer(event).data
-        venue_data = VenueSerializer(venue).data
-        # Send back data to update the page after event addition 
-        # Change response as needed
-        return Response({"event": event_data,
-                            "venue": venue_data}, status=status.HTTP_201_CREATED)
-    # If serailizer is not valid return error
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if venue_id:
+            try:
+                venue = VenueModel.objects.get(id=venue_id)
+                request_data.update({'venue': venue.name, 'lat': venue.lat, 'long': venue.long})
+            except VenueModel.DoesNotExist:
+                return Response({"error": "Venue not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = EventSerializer(data=request_data)
+        if serializer.is_valid():
+            # Get the venue for the event as it is the organiser's venue
+            event = serializer.save()
 
-#
-#
-# LIST ALL EVENTS
-#
-@api_view(['GET'])
-def list_events(request):
-    queryset = EventModel.objects.all()
-    serializer = EventSerializer(queryset, many=True)
-    response_data = serializer.data
+            # Update the hosting_events field of the venue
+            # Venue can hold many events
+            if venue_id: 
+                venue.hosting_events.add(event)
+                venue.save()
+            # venue_data = VenueSerializer(venue).data
 
-    # Send back data to update the page after event addition
-    return Response(response_data, status=status.HTTP_201_CREATED)
+            # Create the event
+            # Send back data to update the page after event addition
+            # Change response as needed
+            event_data = EventSerializer(event).data
+            return Response({"event": event_data}, status=status.HTTP_201_CREATED)
+        # If serailizer is not valid return error
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#
 #
 # BOOK A SEAT (EXPLORE PAGE)
 #
 #
 # Logged in users (not organiser) can book events
+
+
 @api_view(['POST'])
 def book_event(request):
-     # Get the event for the booking
+    # Get the event for the booking
     event_id = request.data.get('event_id')
     try:
         event = EventModel.objects.get(id=event_id)
@@ -113,14 +116,14 @@ def book_event(request):
         user = UserModel.objects.get(id=user_id)
     except UserModel.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+
     number_of_tickets = request.data.get('number_of_tickets')
 
     # Serialize the data
-    serializer = BookingSerializer(user=user, event=event, 
-                                   number_of_tickets=number_of_tickets, 
+    serializer = BookingSerializer(user=user, event=event,
+                                   number_of_tickets=number_of_tickets,
                                    booking_date=datetime.date.today())
-    if serializer.is_valid():  
+    if serializer.is_valid():
         # Save
         serializer.save()
 
@@ -133,23 +136,24 @@ def book_event(request):
 #
 # Users can view events filtered by event category or venue type in the explore page
 # some features like wishlishted events/places will be shown only for logged in users
+
+
 @api_view(['GET'])
-def explore_page(request):
-
+def explore_page(request, category):
+    print("EXPLORE:", category)
     # Request gives you the category selected, it will be MUSEUM by default
-    requested_category = request.data.get('requested_category')
+    # requested_category = request.data.get('requested_category')
 
-    if(requested_category in {VenueModel.MUSEUM, VenueModel.GALLERY}):
-        queryset = VenueModel.objects.filter(venue_category=requested_category)
-        serializer = VenueSerializer(queryset, many=True)   
+    if (category in {VenueModel.MUSEUM, VenueModel.GALLERY}):
+        queryset = VenueModel.objects.filter(venue_category=category)
+        serializer = VenueSerializer(queryset, many=True)
     else:
-        queryset = EventModel.objects.filter(event_category=requested_category)
+        queryset = EventModel.objects.filter(event_category=category)
         serializer = EventSerializer(queryset, many=True)
     response_data = serializer.data
-    
 
     # <TO DO - WISHLIST ADDITION TO THE RESPONSE>
-    # Should we add the wishlist information? 
+    # Should we add the wishlist information?
     # If user is logged in
     # Need to check the user's wishlisted items and that information should also be given
 
@@ -161,6 +165,8 @@ def explore_page(request):
 # MYPLAN PAGE
 #
 # Logged in users(not organiser) can view their plans (itineraries and booked events)
+
+
 @api_view(['GET'])
 def myplan_page(request):
     # ID associated with a user will be given in the request

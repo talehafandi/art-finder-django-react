@@ -27,9 +27,13 @@ class VenueModel(models.Model):
     contact_phone_number = PhoneNumberField(default='')
     venue_category = models.CharField(max_length=2, 
             choices=VENUE_CATEGORY_CHOICES,
-            blank=True, null=True)
+            blank=True)
     hosting_events = models.ManyToManyField("EventModel", related_name="hosts", null=True)
     # image = models.URLField(max_length=MAX_URL_LENGTH)
+    lat = models.DecimalField(max_digits=9, decimal_places=6)
+    long = models.DecimalField(max_digits=9, decimal_places=6)
+
+    REQUIRED_FIELDS = ['lat', 'long', 'venue_category']
 
     def __str__(self):
         return self.name

@@ -49,30 +49,25 @@ def venue_details(request, pk):
 # CREATE VENUE
 #
 #
-@api_view(['POST'])
-def create_venue(request):
+@api_view(['GET', 'POST'])
+def venue_create_and_list(request):
     # # Check if the user is an organiser
     # if request.user.role != UserModel.ORGANISER_ROLE:
     #     return Response({"error": "You do not have permission to perform this action."},
     #                     status=status.HTTP_403_FORBIDDEN)
-    serializer = VenueSerializer(data=request.data)
-    if serializer.is_valid():
-        # Create the venue
-        serializer.save()
-        # Send back data to update the page after venue addition
+    if request.method == 'GET':
+        print(request.data)
+        queryset = VenueModel.objects.all()
+        serializer = VenueSerializer(queryset, many=True)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'POST':
+        serializer = VenueSerializer(data=request.data)
+        if serializer.is_valid():
+            # Create the venue
+            serializer.save()
+            # Send back data to update the page after venue addition
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#
-#
-# LIST ALL VENUES
-#
-@api_view(['GET'])
-def list_venues(request):
-    print(request.data)
-    queryset = VenueModel.objects.all()
-    serializer = VenueSerializer(queryset, many=True)
-
-    # Send response
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
