@@ -23,7 +23,7 @@ def venue_details(request, pk):
         return Response({"error": "Venue not found"}, status=status.HTTP_404_NOT_FOUND)
     
     if (request.method == "GET"):
-        serializer = VenueSerializer(venue, many=True)
+        serializer = VenueSerializer(venue, many=False)
         # Send response
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     elif (request.method == "PATCH"):

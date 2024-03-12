@@ -28,17 +28,23 @@ urlpatterns = [
     
     # EVENTS
     path('events/<str:pk>', event_details), # Delete, Update, and Get Event
-    path('events/', create_event), # CreateEvent
+    path('events/create/', create_event), # Create Event
     path('events/', list_events), # List all events
 
     # VENUES
     path('venues/<str:pk>', venue_details), # Delete, Update, and Get Venue (ideally in organiser signup page)
-    path('venues/', create_venue), # CreateVenue
+    path('venues/create/', create_venue), # Create Venue
     path('venues/', list_venues), # List all venues
     # path('venues/', explore_page), # This view gives events or venues
     # path('events/book_event', book_event), # BookEvent (Cannot check until we link with a user)
 
+    # ITINERARIES
+    path('itineraries/<str:pk>', itinerary_details), # Delete, Update, and Get Itinerary
+    path('itineraries/create/', create_itinerary), # Create Itinerary
+    path('itineraries/', list_itineraries), # List all itineraries
+
     # WIHSLIST
-    path('wishlist/', list_wishlists),
-    path('wishlist/add/', create_wishlist)
+    path('wishlists/<str:pk>', wishlist_details), # Delete, Update, and Get Wishlist
+    path('wishlists/create/', create_wishlist), # Create Wishlist
+    path('wishlists/', list_wishlists), # List all Wishlist
 ]

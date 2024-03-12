@@ -12,6 +12,20 @@ from ..models import *
 from ..serializers import *
 
 
+
+#
+#
+# LIST ALL EVENTS
+#
+@api_view(['GET'])
+def list_events(request):
+    queryset = EventModel.objects.all()
+    serializer = EventSerializer(queryset, many=True)
+    response_data = serializer.data
+
+    # Send back data
+    return Response(response_data, status=status.HTTP_201_CREATED)
+
 # 
 # EVENT VIEWS
 #
@@ -24,11 +38,10 @@ def event_details(request, pk):
         return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
     
     if (request.method == "GET"):
-        serializer = EventSerializer(event, many=True)
-        response_data = serializer.data
+        serializer = EventSerializer(event, many=False)
 
         # Send back data to update the page after event addition
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     elif (request.method == "PATCH"):
         serializer = EventSerializer(event, data=request.data, partial=True)
         if serializer.is_valid():
@@ -78,19 +91,6 @@ def create_event(request):
                             "venue": venue_data}, status=status.HTTP_201_CREATED)
     # If serailizer is not valid return error
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#
-#
-# LIST ALL EVENTS
-#
-@api_view(['GET'])
-def list_events(request):
-    queryset = EventModel.objects.all()
-    serializer = EventSerializer(queryset, many=True)
-    response_data = serializer.data
-
-    # Send back data to update the page after event addition
-    return Response(response_data, status=status.HTTP_201_CREATED)
 
 #
 #
