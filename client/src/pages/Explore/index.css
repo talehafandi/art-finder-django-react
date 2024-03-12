@@ -111,12 +111,12 @@
 
 .map-ui {
   position: relative;
-  box-shadow: inset 10px 4px 9px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 10px 8px 9px rgba(0, 0, 0, 0.2);
 }
 
 .gradient-top {
   position: absolute;
-  width: 60vw;
+  width: 58vw;
   height: 128px;
   background: linear-gradient(180deg, #ffffff 28%, rgba(255, 255, 255, 0) 100%);
   z-index: 3;
@@ -125,7 +125,7 @@
 .gradient-bottom {
   position: absolute;
   bottom: 0;
-  width: 60vw;
+  width: 58vw;
   height: 128px;
   background: linear-gradient(
     180deg,

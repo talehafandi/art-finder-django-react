@@ -10,36 +10,30 @@ class BookingSerializer(serializers.ModelSerializer):
         model = BookingModel
          # except 'booking_date' other files can be included, as we can set it automatically
         fields = ['user', 'event', 'number_of_tickets', 'booking_date']
+        # exclude = ['user', 'booking_date']
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventModel
 
         # to add image field
-        fields = ['title', 'description','date', 'start_time', 'end_time', 'event_category', 'fee']
+        fields = ['title', 'description','date', 'venue', 'start_time', 'end_time', 'event_category', 'fee', 'lat', 'long']
 
 class ItinerarySerializer(serializers.ModelSerializer):
     class Meta:
         model = ItineraryModel
-        fields = ['name', 'description', 'start_date', 'end_date', 'user', 'venues']
-
-    # def validate_venues(self, value):
-    #     if not value:
-    #         return value  # Can be empty
-        
-    #     # Check if all venue IDs provided are valid
-    #     valid_venues = VenueModel.objects.filter(id__in=value)
-    #     if len(value) != valid_venues.count():
-    #         invalid_venues = set(value) - set(valid_venues.values_list('id', flat=True))
-    #         raise serializers.ValidationError(f"The following venue IDs are invalid: {', '.join(map(str, invalid_venues))}")  
-    #     return value
+        fields = ['name', 'description', 'start_date', 'end_date', 'user', 'events', 'venues']
+        # Do we allow events to be added to itinerary or only venues? Should we have a Add to itinerary 
+        # next to book tickets in the explore page?
+        # exclude = ['user', 'events', 'venues']
 
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = VenueModel
         # to add image field
         fields = ['name', 'description', 'address', 'open_time', 'close_time', 
-                  'contact_email', 'contact_phone_number', 'venue_category', 'hosting_events']
+                  'contact_email', 'contact_phone_number', 'venue_category', 'hosting_events', 'lat', 'long']
+        # exclude = ['hosting_events']
 
 class WishlistSerializer(serializers.ModelSerializer):
     class Meta:

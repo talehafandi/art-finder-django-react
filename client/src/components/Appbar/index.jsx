@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./index.css";
 import { Typography } from "@mui/joy";
 import { NavLink } from "react-router-dom";
 import Userbox from "./userbox";
 import Button from "@mui/material/Button";
-// import { useAppContext } from "../../context/appContext";
 
 const AppBar = () => {
+  useEffect(() => {
+    window.onscroll = function () {
+      myFunction();
+    };
+
+    var header = document.getElementById("appbar");
+    var sticky = header.offsetTop;
+
+    function myFunction() {
+      if (window.pageYOffset > sticky) {
+        header.classList.add("sticky");
+        header.style.top = "0";
+      } else {
+        header.classList.remove("sticky");
+      }
+    }
+  });
+
   return (
-    <div className="app-bar">
+    <div className="app-bar" id="appbar">
       <div className="logo-wrapper">
         <div className="logo">
           <Typography

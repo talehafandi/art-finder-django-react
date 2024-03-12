@@ -23,6 +23,7 @@ class EventModel(models.Model):
     # Event model fields
     title = models.CharField(max_length=MAX_TITLE_LENGTH)
     description = models.CharField(max_length=MAX_DESCRIPTION_LENGTH)
+    venue = models.CharField(max_length=MAX_TITLE_LENGTH)
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -31,6 +32,10 @@ class EventModel(models.Model):
             default=ART)
     fee = models.DecimalField(max_digits=10, decimal_places=2)
     # image = models.URLField(max_length=MAX_URL_LENGTH)
+    lat = models.DecimalField(max_digits=9, decimal_places=6)
+    long = models.DecimalField(max_digits=9, decimal_places=6)
+
+    REQUIRED_FIELDS = ['lat', 'long']
 
     def __str__(self):
-        return self.name
+        return self.name 

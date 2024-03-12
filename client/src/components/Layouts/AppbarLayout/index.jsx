@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 import AppBar from "../../Appbar";
 import { AppProvider } from "../../../context/appContext";
 import AuthDialog from "../../../pages/Auth";
+import { MapProvider } from "../../../context/mapContext";
 
 const BaseLayout = ({ children }) => {
   return (
@@ -16,7 +17,7 @@ const BaseLayout = ({ children }) => {
     >
       <AppProvider>
         <AppBar></AppBar>
-        {children || <Outlet />}
+        <MapProvider>{children || <Outlet />}</MapProvider>
         <AuthDialog />
       </AppProvider>
     </Box>

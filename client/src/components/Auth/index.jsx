@@ -4,23 +4,119 @@ import Typography from "@mui/material/Typography";
 import "./index.css";
 import googleIcon from "../../assets/google-icon.png";
 import signInBg from "../../assets/sign-in-bg.png";
-import {
-  PrimaryAltButton,
-  PrimaryButton,
-  SecondaryOutlinedButton,
-} from "../Buttons";
+import { PrimaryAltButton, SecondaryOutlinedButton } from "../Buttons";
 import { useAppContext } from "../../context/appContext";
 import { Checkbox } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { styled } from "@mui/material/styles";
+import { updateSignedInUser } from "../../redux/reducers/userSlice";
+
+import restApi from "../../api";
+import { useDispatch } from "react-redux"; // Import useDispatch
+
+export const LoadingButtonStyled = styled(LoadingButton)(
+  ({ theme }) => `
+       background: ${theme.palette.primary.main};
+       color: ${theme.palette.common.white};
+       height: 44px !important;
+       &:hover {
+          background: ${theme.palette.primary.dark};
+       }
+       white-space: nowrap;
+      `
+);
 
 export const Auth = () => {
+  const dispatch = useDispatch();
+
   const { authPopupVisibility } = useAppContext();
   const [authView, setAuthView] = useState("signin");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [signing, setSigning] = useState(false);
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+    setFirstName("");
+    setLastName("");
+    setUsername("");
+  };
 
   const toggleAuthView = () => {
     if (authView == "signin") setAuthView("signup");
     else setAuthView("signin");
+    resetForm();
   };
 
+  const handleSignIn = async () => {
+    console.log("Signing in...");
+    setSigning(true);
+    await restApi
+      .signIn(username, password)
+      .then((response) => {
+        console.log("Sign in response: ", response);
+        setSigning(false);
+        if (
+          response.status == 200 &&
+          response.data.token != "" &&
+          response.data.token != null &&
+          response.data.token != undefined
+        ) {
+          dispatch(updateSignedInUser(response.data));
+          authPopupVisibility(false);
+        }
+      })
+      .catch((error) => {
+        setSigning(false);
+      });
+  };
+
+  const handleSignUp = async () => {
+    console.log("Signing up...");
+    setSigning(true);
+    await restApi
+      .signUp(firstName, lastName, email, password)
+      .then((response) => {
+        console.log("Sign up response: ", response);
+        setSigning(false);
+        if (
+          response.status == 200 &&
+          response.data.token != "" &&
+          response.data.token != null &&
+          response.data.token != undefined
+        ) {
+          console.log("Signed up successfully!");
+          //TODO: Display a message that an account had been created and promp the user to sign in with the username and password
+        }
+      })
+      .catch((error) => {
+        setSigning(false);
+      });
+  };
   return (
     <div className="sign-in-wrapper">
       <div className="left-side">
@@ -103,21 +199,24 @@ export const Auth = () => {
             <div className="sign-in-form">
               <TextField
                 className="text-field-instance"
-                id="email"
-                label="Email"
+                id="username"
+                label="Username"
                 variant="standard"
                 size="medium"
-                value="spiralmonkey@gmail.com"
+                value={username}
                 sx={{ marginBottom: "10%" }}
+                onChange={handleUsernameChange}
               />
               <TextField
                 className="design-component-instance-node"
                 label="Password"
                 id="password"
+                type="password"
                 size="medium"
-                value="****************"
+                value={password}
                 variant="standard"
                 sx={{ marginBottom: "10%" }}
+                onChange={handlePasswordChange}
               />
             </div>
           )}
@@ -132,7 +231,8 @@ export const Auth = () => {
                   size="medium"
                   sx={{ marginBottom: "10%" }}
                   fullWidth
-                  value="Mahesh"
+                  value={firstName}
+                  onChange={handleFirstNameChange}
                 />
                 <TextField
                   className="text-field-instance"
@@ -142,7 +242,8 @@ export const Auth = () => {
                   size="medium"
                   sx={{ marginBottom: "10%" }}
                   fullWidth
-                  value="Adhikari"
+                  value={lastName}
+                  onChange={handleLastNameChange}
                 />
               </div>
               <TextField
@@ -151,17 +252,20 @@ export const Auth = () => {
                 label="Email"
                 variant="standard"
                 size="medium"
-                value="spiralmonkey@gmail.com"
+                value={email}
                 sx={{ marginBottom: "10%" }}
+                onChange={handleEmailChange}
               />
               <TextField
                 className="design-component-instance-node"
                 label="Password"
                 id="password"
                 size="medium"
-                value="****************"
+                value={password}
+                type="password"
                 variant="standard"
                 sx={{ marginBottom: "10%" }}
+                onChange={handlePasswordChange}
               />
               <div className="tac-check">
                 <Checkbox size="small" />
@@ -183,14 +287,26 @@ export const Auth = () => {
 
         <div className="auth-options">
           {authView == "signin" && (
-            <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
-              SIGN IN
-            </PrimaryButton>
+            <LoadingButtonStyled
+              fullWidth
+              sx={{ marginBottom: "5%" }}
+              onClick={handleSignIn}
+              loading={signing}
+              loadingIndicator="Signing in…"
+            >
+              Sign In
+            </LoadingButtonStyled>
           )}
           {authView == "signup" && (
-            <PrimaryButton fullWidth sx={{ marginBottom: "5%" }}>
+            <LoadingButtonStyled
+              fullWidth
+              sx={{ marginBottom: "5%" }}
+              loading={signing}
+              loadingIndicator="Signing up…"
+              onClick={handleSignUp}
+            >
               SIGN UP
-            </PrimaryButton>
+            </LoadingButtonStyled>
           )}
           <div className="text-wrapper">Or</div>
 
