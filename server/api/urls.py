@@ -6,6 +6,7 @@ from .views.event import *
 from .views.venue import *
 from .views.itinerary import *
 from .views.wishlist import *
+from .views.explore import *
 
 app_name = 'api'
 
@@ -31,6 +32,7 @@ urlpatterns = [
     # EXPLORE
     path('explore/<str:category>', explore_page), # This view gives events or venues
     path('explore', explore_list),
+    path('explore/search/', search),
     
     # WIHSLIST
     path('wishlist', list_wishlists),
