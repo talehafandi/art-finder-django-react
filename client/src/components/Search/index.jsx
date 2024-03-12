@@ -10,6 +10,17 @@ import { useMapContext } from "../../context/mapContext";
 
 const Search = () => {
   const { showMyLocation } = useMapContext();
+  const [searchField, setSearchField] = React.useState("");
+
+  const onChangeSearchField = (event) => {
+    setSearchField(event.target.value);
+  };
+
+  const search = () => {
+    //TODO: Search API
+    console.log("Search input: ", searchField);
+  };
+
   return (
     <Paper
       component="form"
@@ -26,8 +37,15 @@ const Search = () => {
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search..."
         inputProps={{ "aria-label": "search google maps" }}
+        onChange={onChangeSearchField}
+        value={searchField}
       />
-      <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+      <IconButton
+        type="button"
+        sx={{ p: "10px" }}
+        aria-label="search"
+        onClick={() => search()}
+      >
         <SearchIcon />
       </IconButton>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />

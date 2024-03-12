@@ -30,7 +30,7 @@ const Explore = (props) => {
   } = useMapContext();
 
   const [loading, setLoading] = useState(false);
-  const exploreData = useSelector(getExploreData).data;
+  const exploreData = useSelector(getExploreData).data || [];
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get("cat");
   const dispatch = useDispatch();
