@@ -13,6 +13,9 @@ import restApi from "../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { getExploreData, updateExploreData } from "../../redux/reducers/exploreSlice";
 import { useMapContext } from "../../context/mapContext";
+import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+
 
 const Explore = (props) => {
   const {
@@ -25,7 +28,9 @@ const Explore = (props) => {
   } = useMapContext();
 
   const [loading, setLoading] = useState(false);
-
+  // const exploreData = useSelector(getExploreData)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParam = searchParams.get('cat')
   const dispatch = useDispatch();
   useEffect(() => {
     //API call for fetching data on Explore page
@@ -33,16 +38,30 @@ const Explore = (props) => {
     const fetchData = async () => {
       setLoading(true);
       //Make call
-      await restApi
-        .listDataOnExplore()
-        .then((response) => {
-          //Update state on store (See exploreSlice reducer for more insights)
-          dispatch(updateExploreData(response));
-          setLoading(false);
-        })
-        .catch((error) => {
-          setLoading(false);
-        });
+      if (!searchParam){
+        await restApi
+          .listDataOnExplore()
+          .then((response) => {
+            //Update state on store (See exploreSlice reducer for more insights)
+            dispatch(updateExploreData(response));
+            setLoading(false);
+          })
+          .catch((error) => {
+            setLoading(false);
+          });
+      }
+      else {
+        await restApi
+          .getDataOnExplore(searchParam)
+          .then((response) => {
+            //Update state on store (See exploreSlice reducer for more insights)
+            dispatch(updateExploreData(response));
+            setLoading(false);
+          })
+          .catch((error) => {
+            setLoading(false);
+          });
+      }
     };
 
     fetchData();
@@ -84,6 +103,19 @@ const Explore = (props) => {
     return list.map((item) => <EventVenueCard cardDetails={item} />);
   };
 
+  const handleExploreData = (cat) => {
+    const searchParam = searchParams.get('cat')
+
+    if (searchParam == cat) {
+      restApi.listDataOnExplore()
+      setSearchParams({})
+    }
+    else {
+      restApi.getDataOnExplore(cat)
+      setSearchParams({ cat })
+    }
+  }
+
   return (
     <div className="container">
       <div className="container-left">
@@ -97,7 +129,7 @@ const Explore = (props) => {
             </div>
           </div>
           <div className="explorecategoriesmenu">
-            <div className="category-menu" alt="museum" id='MU' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
+            <div className="category-menu" alt="museum" id='MU' onClick={(e) => handleExploreData(e.currentTarget.id)}>
               <div className="category-icon">
                 <AccountBalanceIcon fontSize="large" />
               </div>
@@ -105,7 +137,7 @@ const Explore = (props) => {
                 <span>Museums</span>
               </span>
             </div>
-            <div className="category-menu" alt="galleries" id='GA' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
+            <div className="category-menu" alt="galleries" id='GA' onClick={(e) => handleExploreData(e.currentTarget.id)}>
               <div className="category-icon">
                 <CollectionsIcon fontSize="large" />
               </div>
@@ -113,7 +145,7 @@ const Explore = (props) => {
                 <span>Galleries</span>
               </span>
             </div>
-            <div className="category-menu" alt="photography" id='PH' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
+            <div className="category-menu" alt="photography" id='PH' onClick={(e) => handleExploreData(e.currentTarget.id)}>
               <div className="category-icon">
                 <PhotoCameraIcon fontSize="large" />
               </div>
@@ -121,7 +153,7 @@ const Explore = (props) => {
                 <span>Photography</span>
               </span>
             </div>
-            <div className="category-menu" alt="sculptures" id='SU' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
+            <div className="category-menu" alt="sculptures" id='SU' onClick={(e) => handleExploreData(e.currentTarget.id)}>
               <div className="category-icon">
                 <SculptureIcon sx={{ fontSize: 40 }} />
               </div>
@@ -129,7 +161,7 @@ const Explore = (props) => {
                 <span>Sculptures</span>
               </span>
             </div>
-            <div className="category-menu" alt="crafts" id='CR' onClick={(e) => restApi.getDataOnExplore(e.currentTarget.id)}>
+            <div className="category-menu" alt="crafts" id='CR' onClick={(e) => handleExploreData(e.currentTarget.id)}>
               <div className="category-icon">
                 <ContentCutIcon fontSize="large" />
               </div>
