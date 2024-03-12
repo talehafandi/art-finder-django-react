@@ -1,18 +1,11 @@
 
 from django.urls import path
-from django.urls import re_path
-from .views.user import test
-from .views.user import signup
-from .views.user import login
+
+from .views.user import *
 from .views.event import *
 from .views.venue import *
 from .views.itinerary import *
 from .views.wishlist import *
-from django.contrib import admin
-from .views.user import change_password
-from .views.user import forgot_password
-from .views.user import forgot_password_confirm
-
 
 app_name = 'api'
 
@@ -33,7 +26,6 @@ urlpatterns = [
     # VENUES
     path('venues/<str:pk>', venue_details), # Delete, Update, and Get Venue (ideally in organiser signup page)
     path('venues', venue_create_and_list), # Create Venue, List Venues
-    # path('venues/', explore_page), # This view gives events or venues
     # path('events/book_event', book_event), # BookEvent (Cannot check until we link with a user)
 
     # EXPLORE
