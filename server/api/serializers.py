@@ -42,18 +42,22 @@ class WishlistSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):  
         representation = super().to_representation(instance)
+        # get  ids from wishlist data
         user_id = representation['user']
         events_ids = representation['events']
         venues_ids = representation['venues']
         
+        # get models
         user_data = UserModel.objects.filter(id=user_id).first()
         events_data = EventModel.objects.filter(id__in=events_ids)
         venues_data = VenueModel.objects.filter(id__in=venues_ids)
 
+        # convert into py dict
         user_data = UserSerializer(user_data).data
         events_data = [ EventSerializer(event).data for event in events_data ]
         venues_data = [ VenueSerializer(venue).data for venue in venues_data]
 
+        # combine filtered data
         res = {
             'user': user_data,
             'venues': venues_data,
