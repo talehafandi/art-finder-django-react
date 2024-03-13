@@ -1,7 +1,5 @@
-from datetime import datetime
-from django.http import HttpResponse
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,53 +9,92 @@ from rest_framework.authtoken.models import Token
 from ..models import *
 from ..serializers import *
 
-
-
 #
 #
-# CREATE ITINERARY (MY PLAN PAGE)
+# CREATE AND LIST ITINERARY (MY PLAN PAGE)
 #
 # Logged in users (not organiser) can create itineraries
-@api_view(['POST'])
-def create_itinerary(request):
-    serializer = ItinerarySerializer(data=request.data)
-    if serializer.is_valid():
-        # Associate the user with the itinerary
-        user_id = request.data.get('user_id')
+#
+@permission_classes([IsAuthenticated])
+@api_view(['GET','POST'])
+def itinerary_create_and_list(request):
+
+    if request.method == 'POST':
+        # Get associated user
         try:
-            user = UserModel.objects.get(id=user_id)
+            current_user = UserModel.objects.get(username=request.data['username'])
         except UserModel.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        serializer.validated_data['user'] = user
 
-        # You associate the itinerary with the user, venues are not added yet
-        serializer.save()
+        request.data['user'] = current_user.id
+        serializer = ItinerarySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # Send back data for the page to update
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        queryset = ItineraryModel.objects.all()
+        serializer = ItinerarySerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # Send back data for the page to update
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+# 
+# ITINERARY VIEWS
 #
-#
-#   ADD TO ITINERARY (EXPLORE PAGE)
-#
-# Logged in users (not organiser) can add only venues to an itinerary associated to his profile
-
-@api_view(['POST'])
-def add_venue_to_itinerary(request):
-    # Get the venue to add to the itinerary
-    venue_id = request.data.get('venue_id')
-    itinerary_id = request.data.get('itinerary_id')
+# To update, delete and get specific itinerary
+@permission_classes([IsAuthenticated])
+@api_view(['GET', 'PATCH', 'DELETE'])
+def itinerary_details(request, pk):
+    # If request gives username, can also filter itineraries of the respective user
+    # in the response <NOT DONE>
     try:
-        itinerary = ItineraryModel.objects.get(id=itinerary_id)
-        venue = VenueModel.objects.get(id=venue_id)
+        itinerary = ItineraryModel.objects.get(id=pk)
     except ItineraryModel.DoesNotExist:
         return Response({"error": "Itinerary not found"}, status=status.HTTP_404_NOT_FOUND)
-    except VenueModel.DoesNotExist:
-        return Response({"error": "Venue not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if (request.method == "GET"):
+        serializer = ItinerarySerializer(itinerary, many=False)
+        # Send back data to update the page after itinerary addition
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    elif (request.method == "PATCH"):
+        serializer = ItinerarySerializer(itinerary, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Save
+            serializer.save()
+            return Response({"message": "Itinerary updated", 
+                             "updated_itinerary": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        # Delete Itinerary
+        itinerary.delete()
+        serializer = ItinerarySerializer(itinerary)
+        return Response({"message": "Itinerary deleted", 
+                             "deleted_Itinerary": serializer.data}, status=status.HTTP_204_NO_CONTENT)
+#
+#
+# MYPLAN PAGE
+#
+# Logged in users(not organiser) can view their plans (itineraries and booked events)
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def myplan_page(request):
+    # Get associated user
+    try:
+        current_user = UserModel.objects.get(username=request.data['username'])
+    except UserModel.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Retrieve events booked by the user
+    bookings = BookingModel.objects.filter(user=current_user.id)
+    booking_serializer = BookingSerializer(bookings, many=True)
 
-    itinerary.venues.add(venue)  # Adding venue to the itinerary instance
+    # Retrieve itineraries associated with the user
+    itineraries = ItineraryModel.objects.filter(user=current_user.id)
+    itinerary_serializer = ItinerarySerializer(itineraries, many=True)
 
-    # Return the updated itinerary
-    serializer = ItinerarySerializer(itinerary)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    # Construct the response data
+    response_data = {
+        "bookings": booking_serializer.data,
+        "itineraries": itinerary_serializer.data
+    }
+    return Response(response_data, status=status.HTTP_200_OK)
