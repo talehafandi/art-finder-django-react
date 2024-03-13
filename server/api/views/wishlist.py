@@ -33,27 +33,49 @@ def wishlist_create_and_list(request):
 # WISHLIST VIEWS
 @permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
-def wishlist_details(request, pk):
+def wishlist_details(request, username):
     # If request gives username, can also filter wishlists of the respective user
     # in the response <NOT DONE>
     try:
-        wishlist = WishlistModel.objects.get(id=pk)
-    except WishlistModel.DoesNotExist:
-        return Response({"error": "Wishlist not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+        current_user = UserModel.objects.get(username=username)
+    except UserModel.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
     if request.method == "GET":
+        try: 
+            wishlist = WishlistModel.objects.get(user=current_user.id)
+        except WishlistModel.DoesNotExist:
+            wishlist = { 'user': current_user.id, 'venues': [], 'events': [] }
+            return Response({"Wishlist": wishlist}, status=status.HTTP_200_OK)
+        
         serializer = WishlistSerializer(wishlist, many=False)
         return Response(serializer.data)
     
+    # delete from & add to wishlist
     elif request.method == "PATCH":
+        request.data['user'] = current_user.id
+        try: 
+            wishlist = WishlistModel.objects.get(user=current_user.id)
+        except WishlistModel.DoesNotExist:
+            serializer = WishlistSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                wishlist = WishlistModel.objects.get(user=current_user.id)
+            else: return Response(serializer.errors, status=status.HTTP_402_PAYMENT_REQUIRED)
+        
         serializer = WishlistSerializer(wishlist, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Wishlist updated", 
                              "updated_wishlist": serializer.data}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
     
     elif request.method == "DELETE":
+        try: 
+            wishlist = WishlistModel.objects.get(user=current_user.id)
+        except WishlistModel.DoesNotExist:
+            return Response({"error": "Wishlist not found"}, status=status.HTTP_404_NOT_FOUND)
+        
         wishlist.delete()
         serializer = WishlistSerializer(wishlist)
         return Response({"message": "Wishlist deleted", 

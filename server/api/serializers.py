@@ -32,9 +32,35 @@ class VenueSerializer(serializers.ModelSerializer):
                   'contact_email', 'contact_phone_number', 'venue_category', 'hosting_events', 'lat', 'long']
 
 class WishlistSerializer(serializers.ModelSerializer):
+    # allow events and venues fields to be empty list to remove them from the wishlist
+    events = serializers.PrimaryKeyRelatedField(many=True, queryset=EventModel.objects.all(), required=False)
+    venues = serializers.PrimaryKeyRelatedField(many=True, queryset=VenueModel.objects.all(), required=False)
+
     class Meta:
         model = WishlistModel
         fields = ['user', 'events', 'venues']
+        
+    def to_representation(self, instance):  
+        representation = super().to_representation(instance)
+        user_id = representation['user']
+        events_ids = representation['events']
+        venues_ids = representation['venues']
+        
+        user_data = UserModel.objects.filter(id=user_id).first()
+        events_data = EventModel.objects.filter(id__in=events_ids)
+        venues_data = VenueModel.objects.filter(id__in=venues_ids)
+
+        user_data = UserSerializer(user_data).data
+        events_data = [ EventSerializer(event).data for event in events_data ]
+        venues_data = [ VenueSerializer(venue).data for venue in venues_data]
+
+        res = {
+            'user': user_data,
+            'venues': venues_data,
+            'events': events_data
+        }
+
+        return res
 
 
 class UserSerializer(serializers.ModelSerializer):    

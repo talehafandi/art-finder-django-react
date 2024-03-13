@@ -31,7 +31,7 @@ urlpatterns = [
     path('explore/<str:category>', explore_page), # This view gives events or venues
     
     # WISHLIST
-    path('wishlists/<str:pk>', wishlist_details), # Delete, Update, and Get Wishlist
+    path('wishlists/<str:username>', wishlist_details), # Delete, Update, and Get Wishlist
     path('wishlists', wishlist_create_and_list), # Create and list Wishlist
 
     # ITINERARIES
