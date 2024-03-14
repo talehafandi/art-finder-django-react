@@ -11,13 +11,13 @@ export const MapProvider = ({ children }) => {
   const [allMarkers, setAllMarkers] = useState([]);
   const [markersToDisplay, setMarkersToDisplay] = useState([
     {
-      lat: 61.2176,
-      lng: -149.8997,
+      lat: 55.873402644172984,
+      lng: -4.288952736251727,
     },
   ]);
   const [userLocation, setUserLocation] = useState({
-    lat: 0,
-    lng: 0,
+    lat: 55.873402644172984,
+    lng: 4.288952736251727,
   });
 
   const pushToMarkersToDisplay = (position) =>
