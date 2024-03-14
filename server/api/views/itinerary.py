@@ -38,6 +38,14 @@ def itinerary_create_and_list(request, username):
         serializer = ItinerarySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def itinerary_list(request):
+    queryset = ItineraryModel.objects.all()
+    serializer = ItinerarySerializer(queryset, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 # 
 # ITINERARY VIEWS
 #
