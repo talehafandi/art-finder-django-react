@@ -15,17 +15,17 @@ from ..serializers import *
 #
 # Logged in users (not organiser) can create itineraries
 #
+
 @permission_classes([IsAuthenticated])
 @api_view(['GET','POST'])
-def itinerary_create_and_list(request):
+def itinerary_create_and_list(request, username):
+    try:
+        current_user = UserModel.objects.get(username=username)
+    except UserModel.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'POST':
         # Get associated user
-        try:
-            current_user = UserModel.objects.get(username=request.data['username'])
-        except UserModel.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
         request.data['user'] = current_user.id
         serializer = ItinerarySerializer(data=request.data)
         if serializer.is_valid():
@@ -33,8 +33,8 @@ def itinerary_create_and_list(request):
             # Send back data for the page to update
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        queryset = ItineraryModel.objects.all()
+    elif request.method == 'GET': 
+        queryset = ItineraryModel.objects.filter(user=current_user.id)
         serializer = ItinerarySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -44,13 +44,21 @@ def itinerary_create_and_list(request):
 # To update, delete and get specific itinerary
 @permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
-def itinerary_details(request, pk):
+def itinerary_details(request, username, itinerary_id):
     # If request gives username, can also filter itineraries of the respective user
     # in the response <NOT DONE>
+    # check if user exits
     try:
-        itinerary = ItineraryModel.objects.get(id=pk)
+        current_user = UserModel.objects.get(username=username)
+    except UserModel.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+    try:
+        # make sure app do not send another user's itinerary 
+        itinerary = ItineraryModel.objects.get(id=itinerary_id, user=current_user.id)
     except ItineraryModel.DoesNotExist:
         return Response({"error": "Itinerary not found"}, status=status.HTTP_404_NOT_FOUND)
+
     
     if (request.method == "GET"):
         serializer = ItinerarySerializer(itinerary, many=False)
