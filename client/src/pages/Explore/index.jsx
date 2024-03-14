@@ -15,19 +15,13 @@ import {
   getExploreData,
   updateExploreData,
 } from "../../redux/reducers/exploreSlice";
+import { updateWishlistData } from "../../redux/reducers/wishlistSlice";
 import { useMapContext } from "../../context/mapContext";
 import { useParams } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
 const Explore = (props) => {
-  const {
-    setAllMarkers,
-    markersToDisplay,
-    setUserLocation,
-    pushToMarkersToDisplay,
-    updateMarkersToDisplay,
-    showMyLocation,
-  } = useMapContext();
+  const { markersToDisplay } = useMapContext();
 
   const [loading, setLoading] = useState(false);
   const exploreData = useSelector(getExploreData).data || [];
@@ -68,40 +62,32 @@ const Explore = (props) => {
     fetchData();
   }, [searchParam]);
 
-  const list = [
-    {
-      cardTitle: "Art Workshop at Gallery X",
-      date: "2024-03-15T12:00:00Z",
-      address: "123 Main Street, Cityville, USA",
-      position: { lat: 40.7128, lng: -74.006 },
-      description:
-        "Join us for an exciting art workshop at Gallery X. Explore various techniques and unleash your creativity! This workshop will cover a wide range of topics, including painting, sculpture, and mixed media. Whether you're a beginner or an experienced artist, there's something for everyone to enjoy. Don't miss this opportunity to connect with fellow art enthusiasts and expand your artistic horizons.",
-      keywords: ["Gallery", "Craft"],
-      type: "event",
-    },
-    {
-      cardTitle: "Photography Exhibition: Capturing Moments",
-      date: "2024-04-10T10:00:00Z",
-      address: "456 Elm Street, Townsville, USA",
-      position: { lat: 34.0522, lng: -118.2437 },
-      description:
-        "Experience the world through the lens of talented photographers. Our exhibition showcases captivating moments frozen in time. From breathtaking landscapes to intimate portraits, each photograph tells a unique story. Join us as we explore the beauty and complexity of the world around us through the art of photography.",
-      keywords: ["Photography", "Gallery"],
-      type: "event",
-    },
-    {
-      cardTitle: "Sculpture Symposium: Art in the Park",
-      date: "2024-05-20T09:00:00Z",
-      address: "789 Oak Avenue, Villagetown, USA",
-      position: { lat: 51.5074, lng: -0.1278 },
-      description:
-        "Witness master sculptors bring stone to life at our annual Sculpture Symposium. Enjoy live demonstrations and interactive workshops. Learn about different sculpting techniques and discover the stories behind each unique piece. Whether you're an art enthusiast or simply curious about the creative process, this event promises to inspire and captivate audiences of all ages.",
-      keywords: ["Sculpture", "Craft"],
-      type: "event",
-    },
-  ];
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      await restApi
+        .getDataOnWishlist()
+        .then((response) => {
+          dispatch(updateWishlistData(response));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchWishlist();
+  });
+
   const renderList = () => {
-    return exploreData.map((item) => <EventVenueCard cardDetails={item} />);
+    if (exploreData.length > 0)
+      return exploreData.map((item) => <EventVenueCard cardDetails={item} />);
+    else
+      return (
+        <>
+          <div class="no-results-container">
+            <div class="no-results-icon">😞</div>
+            <div class="no-results-message">No results found!</div>
+          </div>
+        </>
+      );
   };
 
   const handleExploreData = (cat) => {
@@ -114,6 +100,12 @@ const Explore = (props) => {
       restApi.getDataOnExplore(cat);
       setSearchParams({ cat });
     }
+  };
+
+  const setMenuActiveClassname = (category) => {
+    if (searchParam == category)
+      return "category-menu clickable-div active-cat-menu";
+    else return "category-menu clickable-div";
   };
 
   return (
@@ -130,7 +122,7 @@ const Explore = (props) => {
           </div>
           <div className="explorecategoriesmenu">
             <div
-              className="category-menu"
+              className={setMenuActiveClassname("MU")}
               alt="museum"
               id="MU"
               onClick={(e) => handleExploreData(e.currentTarget.id)}
@@ -143,7 +135,7 @@ const Explore = (props) => {
               </span>
             </div>
             <div
-              className="category-menu"
+              className={setMenuActiveClassname("GA")}
               alt="galleries"
               id="GA"
               onClick={(e) => handleExploreData(e.currentTarget.id)}
@@ -156,7 +148,7 @@ const Explore = (props) => {
               </span>
             </div>
             <div
-              className="category-menu"
+              className={setMenuActiveClassname("PH")}
               alt="photography"
               id="PH"
               onClick={(e) => handleExploreData(e.currentTarget.id)}
@@ -169,7 +161,7 @@ const Explore = (props) => {
               </span>
             </div>
             <div
-              className="category-menu"
+              className={setMenuActiveClassname("SU")}
               alt="sculptures"
               id="SU"
               onClick={(e) => handleExploreData(e.currentTarget.id)}
@@ -182,7 +174,7 @@ const Explore = (props) => {
               </span>
             </div>
             <div
-              className="category-menu"
+              className={setMenuActiveClassname("CR")}
               alt="crafts"
               id="CR"
               onClick={(e) => handleExploreData(e.currentTarget.id)}
