@@ -35,11 +35,13 @@ urlpatterns = [
     path('explore/search/', search),
 
     # WISHLIST
-    path('wishlists/<str:username>', wishlist_details), # Delete, Update, and Get Wishlist
-    path('wishlists', wishlist_create_and_list), # Create and list Wishlist
-
+    path('<str:username>/wishlists', wishlist_details), # Delete, Update, and Get Wishlist
+    path('<str:username>/wishlists', wishlist_create_and_list), # Create and list Wishlist
+    path('wishlists', get_all_wishlists), 
+    
     # ITINERARIES
-    path('itineraries/<str:pk>', itinerary_details), # Delete, Update, and Get Itinerary
+    path('<str:username>/itineraries', itinerary_create_and_list), # Get itenaries by username
+    path('<str:username>/itineraries/<str:itinerary_id>', itinerary_details), # Delete, Update, and Get Itinerary
     path('itineraries', itinerary_create_and_list), # Create and list Itinerary
 
     # BOOKINGS

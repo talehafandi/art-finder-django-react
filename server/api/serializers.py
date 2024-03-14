@@ -22,7 +22,28 @@ class EventSerializer(serializers.ModelSerializer):
 class ItinerarySerializer(serializers.ModelSerializer):
     class Meta:
         model = ItineraryModel
-        fields = ['name', 'description', 'start_date', 'end_date', 'user', 'venues']
+        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'user', 'venues']
+
+
+    def to_representation(self, instance):  
+        representation = super().to_representation(instance)
+        # get  ids from wishlist data
+        user_id = representation['user']
+        venues_ids = representation['venues']
+        
+        # get models
+        user_data = UserModel.objects.filter(id=user_id).first()
+        venues_data = VenueModel.objects.filter(id__in=venues_ids)
+
+        # convert into py dict
+        user_data = UserSerializer(user_data).data
+        venues_data = [ VenueSerializer(venue).data for venue in venues_data]
+
+        # add filtered data to representation
+        representation['user'] = user_data
+        representation['venues'] = venues_data
+
+        return representation
 
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
