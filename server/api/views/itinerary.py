@@ -1,6 +1,4 @@
-from rest_framework import permissions
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -16,7 +14,6 @@ from ..serializers import *
 # Logged in users (not organiser) can create itineraries
 #
 
-@permission_classes([IsAuthenticated])
 @api_view(['GET','POST'])
 def itinerary_create_and_list(request, username):
     try:
@@ -39,7 +36,6 @@ def itinerary_create_and_list(request, username):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def itinerary_list(request):
     queryset = ItineraryModel.objects.all()
@@ -50,7 +46,6 @@ def itinerary_list(request):
 # ITINERARY VIEWS
 #
 # To update, delete and get specific itinerary
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
 def itinerary_details(request, username, itinerary_id):
     # If request gives username, can also filter itineraries of the respective user
@@ -91,7 +86,6 @@ def itinerary_details(request, username, itinerary_id):
 # MYPLAN PAGE
 #
 # Logged in users(not organiser) can view their plans (itineraries and booked events)
-@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def myplan_page(request):
     # Get associated user

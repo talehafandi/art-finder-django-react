@@ -1,6 +1,9 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.contrib.auth.hashers import check_password
+
 from .models.user import UserModel
 from .models import *
 from .utils import generate_avatar
@@ -91,11 +94,11 @@ class WishlistSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:
         model = UserModel
-        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'avatar_url']  # Include 'username' in fields
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'avatar_url', 'role', 'id']  # Include 'username' in fields
 
     def create(self, validated_data):
 
-        # Hash the password before creating the user
+
         validated_data['password'] = make_password(validated_data['password'])
         
         fullname = validated_data['first_name'] + " " + validated_data['last_name']
@@ -108,9 +111,18 @@ class UserSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        # Hash the password before updating the user
-        if 'password' in validated_data:
-            validated_data['password'] = make_password(validated_data['password'])
+        new_pass = validated_data['password']
+        current_pass = instance.password
+
+        if new_pass:
+            # check if new password is different than current one
+            if check_password(new_pass, current_pass):
+                raise serializers.ValidationError("New password cannot be same as current one")
+
+            # validate new password
+            self.validate_password(new_pass)
+            validated_data['password'] = make_password(new_pass)
+            
         return super().update(instance, validated_data)
         
     def to_representation(self, instance):
@@ -123,3 +135,11 @@ class UserSerializer(serializers.ModelSerializer):
             key: value for key, value in data.items() if key not in excluded_fields
         }
         return response_data
+
+    def validate_password(self, value):
+        try:
+            validate_password(value)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
+
+        return value

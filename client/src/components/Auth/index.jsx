@@ -14,6 +14,10 @@ import { updateSignedInUser } from "../../redux/reducers/userSlice";
 import restApi from "../../api";
 import { useDispatch } from "react-redux"; // Import useDispatch
 
+
+const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    
+
 export const LoadingButtonStyled = styled(LoadingButton)(
   ({ theme }) => `
        background: ${theme.palette.primary.main};
@@ -97,6 +101,10 @@ export const Auth = () => {
 
   const handleSignUp = async () => {
     console.log("Signing up...");
+    if (!passwordRegex.test(password)) {
+      return alert("Password must include at least one lowercase letter, one uppercase letter, and be alphanumeric.")
+    }
+
     setSigning(true);
     await restApi
       .signUp(firstName, lastName, email, password)
@@ -104,14 +112,14 @@ export const Auth = () => {
         console.log("Sign up response: ", response);
         setSigning(false);
         if (
-          response.status == 200 &&
+          response?.status == 200 &&
           response.data.token != "" &&
           response.data.token != null &&
           response.data.token != undefined
         ) {
           console.log("Signed up successfully!");
           //TODO: Display a message that an account had been created and promp the user to sign in with the username and password
-        }
+        } 
       })
       .catch((error) => {
         setSigning(false);

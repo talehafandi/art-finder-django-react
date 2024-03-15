@@ -39,3 +39,40 @@ def generate_avatar(fullname):
     # def generate_avatar_and_save(name, image):
     #     avatar = generate_avatar(name)
     #     return None
+
+from django.conf import settings
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.backends import TokenBackend
+
+
+class CustomJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        try: 
+            header = self.get_header(request)
+            if header is None: return None
+
+            raw_token = self.get_raw_token(header)
+            validated_token = self.get_validated_token(raw_token)
+            print("val tok:", validated_token)
+
+            return self.get_user(validated_token), validated_token
+        except:
+            return None
+
+from django.template.loader import render_to_string, get_template
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+
+
+def send_otp(receiver, otp):
+    email_html = render_to_string('otp_email.html', {'otp': otp})
+
+    msg = EmailMultiAlternatives(
+        subject='Your OTP for Password Reset',
+        body='Password Reset',
+        from_email=settings.EMAIL_HOST_USER,
+        to=[receiver]
+    )
+
+    msg.attach_alternative(email_html, "text/html")
+    msg.send()

@@ -34,7 +34,7 @@ def wishlist_create_and_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'GET':
-        wishlists = WishlistModel.objects.filter(user=current_user.id)
+        wishlists = WishlistModel.objects.filter(user=request.user.id)
         serializer = WishlistSerializer(wishlists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -51,7 +51,7 @@ def wishlist_details(request, username):
 
     if request.method == "GET":
         try: 
-            wishlist = WishlistModel.objects.get(user=current_user.id)
+            wishlist = WishlistModel.objects.get(user=request.user.id)
         except WishlistModel.DoesNotExist:
             wishlist = { 'user': current_user.id, 'venues': [], 'events': [] }
             return Response({"Wishlist": wishlist}, status=status.HTTP_200_OK)
@@ -63,13 +63,13 @@ def wishlist_details(request, username):
     elif request.method == "PATCH":
         request.data['user'] = current_user.id
         try: 
-            wishlist = WishlistModel.objects.get(user=current_user.id)
+            wishlist = WishlistModel.objects.get(user=request.user.id)
         except WishlistModel.DoesNotExist:
             serializer = WishlistSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                wishlist = WishlistModel.objects.get(user=current_user.id)
-            else: return Response(serializer.errors, status=status.HTTP_402_PAYMENT_REQUIRED)
+                wishlist = WishlistModel.objects.get(user=request.user.id)
+            else: return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
         
         serializer = WishlistSerializer(wishlist, data=request.data, partial=True)
         if serializer.is_valid():
@@ -80,7 +80,7 @@ def wishlist_details(request, username):
     
     elif request.method == "DELETE":
         try: 
-            wishlist = WishlistModel.objects.get(user=current_user.id)
+            wishlist = WishlistModel.objects.get(user=request.user.id)
         except WishlistModel.DoesNotExist:
             return Response({"error": "Wishlist not found"}, status=status.HTTP_404_NOT_FOUND)
         
@@ -104,7 +104,7 @@ def mywishlist_page(request):
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
     
     # Retrieve events booked by the user
-    wishlists = WishlistModel.object.filter(user=current_user.id)
+    wishlists = WishlistModel.object.filter(user=request.user.id)
     serializer = WishlistSerializer(wishlists, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)

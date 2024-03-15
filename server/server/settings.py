@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'api',
 ]
 
+import sys
+sys.path.append(BASE_DIR)
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -57,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'api.middlewares.auth.AuthenticationMiddleware',
+    'api.middlewares.auth.AuthorizationMiddleware',
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -64,7 +69,7 @@ ROOT_URLCONF = 'server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'api', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -151,3 +156,37 @@ EMAIL_HOST_PASSWORD= config('EMAIL_PASS')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# urls that does not need login
+BYPASS_AUTH = [
+    '/api/v1/auth/login',
+    '/api/v1/auth/signup',
+    '/api/v1/auth/change-password',
+    '/api/v1/auth/forgot-password',
+    '/api/v1/auth/forgot-password-confirm'
+]
+
+ACCESS = {
+    'test/': ['admin'],
+
+    'events/<str:pk>': ['admin', 'user', 'organiser'],
+    'events': ['admin', 'user', 'organiser'],
+
+    'venues/<str:pk>': ['admin', 'user', 'organiser'],
+    'venues': ['admin', 'user', 'organiser'],
+
+    'explore/<str:category>': ['admin', 'user', 'organiser'],
+    'explore': ['admin', 'user', 'organiser'],
+    'explore/search/': ['admin', 'user', 'organiser'],
+
+    '<str:username>/wishlists': ['admin', 'user'],
+    'wishlists': ['admin', 'user'],
+
+    '<str:username>/itineraries': ['admin', 'user'],
+    '<str:username>/itineraries/<str:itinerary_id>': ['admin', 'user'],
+    'itineraries': ['admin', 'user'],
+    
+    'bookings/<str:pk>': ['admin', 'user', 'organiser'],
+    'bookings': ['admin', 'user', 'organiser'],
+    'myplans': ['admin', 'user', 'organiser'],
+}

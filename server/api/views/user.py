@@ -3,12 +3,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -17,10 +14,10 @@ import random
 
 from ..models.user import UserModel
 from ..serializers import UserSerializer
+from ..utils import send_otp
 
 
 # USER AUTH
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -83,7 +80,7 @@ def login(request):
         return Response({"message": "UNKNOWN_ERROR_HAPPENED"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def change_password(request):
     current_password = str(request.data['current_password'])
     new_password = str(request.data['new_password'])
@@ -94,12 +91,13 @@ def change_password(request):
     if not check_password(current_password, user.password):
         return Response({'error': 'INVALID_CREDENTIALS'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Update user's password
-    user.set_password(new_password)
-    user.save()
-
+    serializer = UserSerializer(user, {'password': new_password}, partial=True)
+    if serializer.is_valid() == False: 
+        return Response({'message': serializer.errors})
+    serializer.save()
+    
+    user = UserModel.objects.get(username=request.data['username'])
     access_token = str(MyTokenObtainPairSerializer.get_token(user=user))
-    serializer = UserSerializer(user)
 
     return Response({'message': 'Password changed successfully', 'token': access_token})
 
@@ -115,18 +113,11 @@ def forgot_password(request):
 
         user.forgot_pass_otp = otp
         otp_lifetime = int(config('OTP_EXPIRE'))
-        user.forgot_pass_otp_expiry = timezone.now(
-        ) + timezone.timedelta(seconds=otp_lifetime)
+        user.forgot_pass_otp_expiry = timezone.now() + timezone.timedelta(seconds=otp_lifetime)
         print('user: ', user.forgot_pass_otp_expiry)
         user.save()
 
-        # add mailing service here
-        email_title = 'RESETTING PASSWORD',
-        email_text = 'Here is your OTP: ' + str(otp)
-        email_sender = settings.EMAIL_HOST_USER
-        # email_receiver = user_email
-        send_mail(email_title, email_text, email_sender, [
-                  user_email, 'angulardev789@gmail.com'], fail_silently=False)
+        send_otp(user_email, otp)
 
         return Response({"message": "Confirmation code is sent to your email"})
 
@@ -147,11 +138,9 @@ def forgot_password_confirm(request):
 
         # fetch user, write new pass and delete otp
         user = UserModel.objects.get(email=email, forgot_pass_otp=otp)
-
         if (user.forgot_pass_otp_expiry < timezone.now()):
             raise Exception('OTP_EXPIRED')
         print("forgot_pass_otp_expiry: ", user.forgot_pass_otp_expiry)
-        print("current_time: ", timezone.now())
 
         user.set_password(new_password)
         user.forgot_pass_otp = None
@@ -169,11 +158,11 @@ def forgot_password_confirm(request):
         return Response({"message": "INVALID_CREDENTIALS"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as error:
-        print("ERROR:", error)
+        # print("ERROR:", error)
         error_message = "UNKNOWN_ERROR_HAPPENED"
 
         if str(error) == 'OTP_EXPIRED':
-            error_message = 'OTP is expired, reques new code!'
+            error_message = 'OTP is expired, request new code!'
 
         return Response({"message": error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -181,6 +170,7 @@ def forgot_password_confirm(request):
 @api_view(['GET'])
 def test(request):
     return Response({'res': 'test'})
+    
 
 # @authentication_classes([SessionAuthentication, TokenAuthentication])
 # @permission_classes([IsAuthenticated])
