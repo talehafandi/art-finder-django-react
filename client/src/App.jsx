@@ -7,9 +7,6 @@ import "./App.css";
 
 function App() {
   const content = useRoutes(routes);
-
-  //Todo: Context Providers
-
   return (
     <ThemeProvider>
       <CssBaseline />
