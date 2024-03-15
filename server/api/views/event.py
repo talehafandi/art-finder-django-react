@@ -25,10 +25,8 @@ def event_details(request, pk):
 
     if (request.method == "GET"):
         serializer = EventSerializer(event, many=True)
-        response_data = serializer.data
-
         # Send back data to update the page after event addition
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     elif (request.method == "PATCH"):
         serializer = EventSerializer(event, data=request.data, partial=True)
         if serializer.is_valid():

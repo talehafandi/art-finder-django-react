@@ -35,7 +35,7 @@ urlpatterns = [
     path('explore/search/', search),
 
     # WISHLIST
-    path('<str:username>/wishlists', wishlist_details), # Delete, Update, and Get Wishlist
+    path('<str:username>/wishlists/<str:itinerary_id>', wishlist_details), # Delete, Update, and Get Wishlist
     path('<str:username>/wishlists', wishlist_create_and_list), # Create and list Wishlist
     path('wishlists', get_all_wishlists), 
 

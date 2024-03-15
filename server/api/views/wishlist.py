@@ -7,24 +7,17 @@ from ..serializers import WishlistSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
-@permission_classes([IsAuthenticated])
-@api_view(['GET','POST'])
-def get_all_wishlists(request):
-    wishlists = WishlistModel.objects.all()
-    serializer = WishlistSerializer(wishlists, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 # CREATE WISHLIST
 @permission_classes([IsAuthenticated])
 @api_view(['GET','POST'])
-def wishlist_create_and_list(request):
+def wishlist_create_and_list(request, username):
     try:
-        current_user = UserModel.objects.get(username=request.data['username'])
+        current_user = UserModel.objects.get(username=username)
     except UserModel.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if (request.method == 'POST'):
+        print("In wishlist post")
         request.data['user'] = current_user.id
 
         # Serialize data
@@ -37,6 +30,13 @@ def wishlist_create_and_list(request):
         wishlists = WishlistModel.objects.filter(user=current_user.id)
         serializer = WishlistSerializer(wishlists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def get_all_wishlists(request):
+    wishlists = WishlistModel.objects.all()
+    serializer = WishlistSerializer(wishlists, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # WISHLIST VIEWS
 @permission_classes([IsAuthenticated])

@@ -83,7 +83,7 @@ def login(request):
         return Response({"message": "UNKNOWN_ERROR_HAPPENED"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['POST'])
+@api_view(['PATCH'])
 def change_password(request):
     current_password = str(request.data['current_password'])
     new_password = str(request.data['new_password'])
