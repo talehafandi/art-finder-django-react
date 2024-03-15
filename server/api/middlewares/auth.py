@@ -1,8 +1,8 @@
-from rest_framework.response import Response
-from rest_framework import status
 from ..models.user import UserModel
 from django.conf import settings
 import jwt
+from django.http import JsonResponse
+
 
 class AuthenticationMiddleware:
     def __init__(self, get_response):
@@ -13,16 +13,15 @@ class AuthenticationMiddleware:
         if request.path in settings.BYPASS_AUTH:
             return self.get_response(request)
 
-        token = request.headers.get('Authorization') or request.COOKIES.get('token')
-        if not token: return Response({'message': 'TOKEN_NOT_PROVIDED'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        try:
+        token = request.headers.get('Authorization')
+        if not token: JsonResponse({'message': 'TOKEN_NOT_PROVIDED'}, status=401)
+        try:    
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
             request.user = UserModel.objects.get(pk=payload['user_id'])
         except jwt.ExpiredSignatureError:
-            return Response({'message': 'TOKEN_EXPIRED'}, status=status.HTTP_401_UNAUTHORIZED)
+            return JsonResponse({'message': 'TOKEN_EXPIRED'}, status=401)
         except (jwt.InvalidTokenError, UserModel.DoesNotExist):
-            return Response({'message': 'INVALID_TOKEN'}, status=status.HTTP_401_UNAUTHORIZED)
+            return JsonResponse({'message': 'INVALID_TOKEN'}, status=401)
 
         return self.get_response(request)
 
@@ -37,6 +36,6 @@ class AuthorizationMiddleware:
             
         required_roles = settings.ACCESS.get(request.path)
         if required_roles and request.user.role not in required_roles:
-            return Response({'message': 'FORBIDDEN'}, status=status.HTTP_403_FORBIDDEN)
+            return JsonResponse({'message': 'FORBIDDEN'}, status=403)
 
         return self.get_response(request)

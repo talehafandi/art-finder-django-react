@@ -55,7 +55,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -83,6 +82,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'server.wsgi.application'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ]
+}
+
 
 
 # Database
@@ -161,13 +167,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 BYPASS_AUTH = [
     '/api/v1/auth/login',
     '/api/v1/auth/signup',
-    '/api/v1/auth/change-password',
     '/api/v1/auth/forgot-password',
     '/api/v1/auth/forgot-password-confirm'
 ]
 
 ACCESS = {
     'test/': ['admin'],
+
+    '/api/v1/auth/change-password': ['admin', 'user', 'organiser'],
 
     'events/<str:pk>': ['admin', 'user', 'organiser'],
     'events': ['admin', 'user', 'organiser'],
