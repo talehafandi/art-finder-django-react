@@ -170,11 +170,6 @@ def forgot_password_confirm(request):
 @api_view(['GET'])
 def test(request):
     return Response({'res': 'test'})
-    
-
-# @authentication_classes([SessionAuthentication, TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-
 
 def test_token(request):
     return Response({'message': 'passed!'}, status=200)

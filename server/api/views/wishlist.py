@@ -1,13 +1,10 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.shortcuts import get_object_or_404
 from ..models import WishlistModel, UserModel
 from ..serializers import WishlistSerializer
-from rest_framework.permissions import IsAuthenticated
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['GET','POST'])
 def get_all_wishlists(request):
     wishlists = WishlistModel.objects.all()
@@ -16,7 +13,6 @@ def get_all_wishlists(request):
 
 
 # CREATE WISHLIST
-@permission_classes([IsAuthenticated])
 @api_view(['GET','POST'])
 def wishlist_create_and_list(request):
     try:
@@ -39,7 +35,6 @@ def wishlist_create_and_list(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # WISHLIST VIEWS
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
 def wishlist_details(request, username):
     # If request gives username, can also filter wishlists of the respective user
@@ -94,7 +89,6 @@ def wishlist_details(request, username):
 # MYWISHLIST PAGE <NOT SURE IF THIS IS NEEDED)
 #
 # Logged in users(not organiser) can view their wishlisted venues and events
-@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def mywishlist_page(request):
     # Get associated user
