@@ -4,7 +4,6 @@ from rest_framework import status
 from ..models import WishlistModel, UserModel
 from ..serializers import WishlistSerializer
 
-
 @api_view(['GET','POST'])
 def get_all_wishlists(request):
     wishlists = WishlistModel.objects.all()
@@ -14,13 +13,14 @@ def get_all_wishlists(request):
 
 # CREATE WISHLIST
 @api_view(['GET','POST'])
-def wishlist_create_and_list(request):
+def wishlist_create_and_list(request, username):
     try:
-        current_user = UserModel.objects.get(username=request.data['username'])
+        current_user = UserModel.objects.get(username=username)
     except UserModel.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if (request.method == 'POST'):
+        print("In wishlist post")
         request.data['user'] = current_user.id
 
         # Serialize data
@@ -33,6 +33,12 @@ def wishlist_create_and_list(request):
         wishlists = WishlistModel.objects.filter(user=request.user.id)
         serializer = WishlistSerializer(wishlists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_all_wishlists(request):
+    wishlists = WishlistModel.objects.all()
+    serializer = WishlistSerializer(wishlists, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # WISHLIST VIEWS
 @api_view(['GET', 'PATCH', 'DELETE'])
