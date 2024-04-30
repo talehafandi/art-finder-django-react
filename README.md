@@ -1,38 +1,74 @@
-# ART FINDER
+### README 
 
-**PLEASE READ THIS FOR GIT BEST PRACTICES**
+# Art Finder
 
-In Commit messages we should aim short and clear messages that will give idea to other developers about the purpose of this commit, what was done and what files/functions were altered. To do that, we will follow these guidelines
-- Always mention commit type in the start and write your commit messages in present simple tense (e.g. "feat: add popup component" instead of "I added popup component")
-- Make sure you are pushing to your own branch and pull changes before pushing.
-- Even if you make mistake in commit message, do not try to change or undo commit. Just tell other members about the mistake.
-- Avoid using rebase, revert, reset or any other dangerous git commands.
-- Read about git commands and branches
+## Introduction
+Art Finder is a dynamic web application designed to enhance the experience of art enthusiasts by simplifying the process of discovering galleries, museums, and art-related events in their vicinity. This platform not only provides tailored information about various art locations and events but also allows users to organize and plan their art journeys with ease.
 
-Here are the commit types we are going to use:
-- feat – a new feature is introduced with the changes
-- fix – a bug fix has occurred
-- refactor – refactored code that neither fixes a bug nor adds a feature (for example optimising function)
-- test – including new or correcting previous tests
-- docs – updates to documentation such as a the README or other markdown files
-- style – changes that do not affect the meaning of the code, likely related to code formatting such as white-space, missing semi-colons, and so on.
-- chore – changes that do not relate to a fix or feature and don't modify src or test files (for example updating dependencies)
+## Features
 
-For more on github:
-- [How to write better commit messages](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/)
-- [Github branches](https://www.freecodecamp.org/news/git-branching-commands-explained/)
+- **User Authentication**: Secure registration and login process.
+- **User Service**: Full CRUD (Create, Read, Update, Delete) operations for user profiles.
+- **Wishlist Service**: Users can add or remove items to a personal wishlist for future visits.
+- **Venue Service**: Browse and search functionalities for finding galleries and museums.
+- **Event Service**: Explore upcoming art-related events.
+- **Explore Service**: Customized search options to discover venues and events based on categories.
+- **Mailing Service**: Automated emails for updates and reminders.
 
-**HERE ARE THE ESSENTIAL LINKS WHICH WILL BE DELETED AFTER THE PROJECT IS DONE (WILL BE REPLACED WITH ACTUAL README CONTEXT)**
+## Pages
 
-- [Trello](https://trello.com/b/389APWXc/itech-group-1)
-- [Figma](https://www.figma.com/file/kXRVViwBmaClvaXGVRTekf/ArtFinder?type=design&node-id=0-1&mode=design&t=wC9a0yAZdBTpwqxj-0)
+- **Explore**: Discover venues and events.
+- **My Plans**: Manage and plan upcoming visits and itineraries.
+- **Wishlist**: Keep track of favorite venues and events.
 
-**Learning** 
-- [JavaScript Beginner](https://youtu.be/W6NZfCO5SIk?si=Pa3LOhr0LzdCJ6uj)
-- [JavaScript for React](https://youtu.be/m55PTVUrlnA?si=L1sMoSOWP2ZIVgmq)
-- [React Crash Course 1.5hrs](https://youtu.be/w7ejDZ8SWv8?si=daN-Leo-uKp_yPLY)
-- [React Documentation](https://react.dev/)
-- [React Hooks Playlist](https://youtube.com/playlist?list=PLZlA0Gpn_vH8EtggFGERCwMY5u5hOjf-h&si=mrdsYMoDg_dvlO1k)
-- [BEM naming in CSS/SCSS](https://youtu.be/SLjHSVwXYq4?si=eQw4lEu9xebkTtdV)
-- [REST API reading](https://aws.amazon.com/what-is/restful-api/)
-  
+## Tech Stack
+
+- **Frontend**: React.js, CSS, Redux Toolkit
+- **Backend**: Python, Django
+- **Database**: SQLite
+- **Authentication**: JWT
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- Python 3.x
+- pip (Python package installer)
+
+### Installation
+
+1. **Clone the repository**
+   ```
+   git clone https://github.com/talehafandi/art-finder-django-react.git
+   cd art-finder-django-react
+   ```
+
+2. **Install Backend Dependencies**
+   ```
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+3. **Migrate the Database**
+   ```
+   python manage.py migrate
+   ```
+
+4. **Run the Backend Server**
+   ```
+   python manage.py runserver
+   ```
+
+5. **Install Frontend Dependencies**
+   ```
+   cd ../frontend
+   npm install
+   ```
+
+6. **Run the Frontend Development Server**
+   ```
+   npm start
+   ```
+
+The application should now be running on `localhost:3000` for the frontend and `localhost:8000` for the backend.
